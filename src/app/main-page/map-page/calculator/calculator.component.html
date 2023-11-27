@@ -1,0 +1,20 @@
+<div class="calculator-container">
+  <div class="calculator-content backdrop-blur">
+    <div class="calculator-form">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" ngNativeValidate>
+        <div class="form-group">
+          <input #cityName type="text" class="calculator-control" formControlName="cityName" placeholder="City name or coordinates" autocomplete="off" [required]="true"/>
+        </div>
+        <div class="form-group">
+          <input #number type="number" class="calculator-control" formControlName="number" placeholder="Number of events" autocomplete="off" [required]="true"/>
+        </div>
+        <div class="form-group">
+          <input #radius type="number" class="calculator-control" formControlName="radius" placeholder="Radius of event" autocomplete="off" [required]="true"/>
+        </div>
+        <div class="form-group form-button">
+          <input type="submit" name="calculate" class="calculator-button" value="Calculate"/>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
