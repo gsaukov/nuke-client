@@ -19,6 +19,7 @@ export class CalculatorComponent {
 
   @Input() map!: Map;
   form: FormGroup
+  loading: boolean = false
 
   constructor(private mapService: MapService, private nominatimService: NominatimService, private overpassService: OverpassService) {
     this.form = new FormGroup({
@@ -30,6 +31,7 @@ export class CalculatorComponent {
 
   onSubmit() {
     this.form.disable()
+    this.loading = true
     const cityName = this.form.controls['cityName'].value
     const radius = this.form.controls['radius'].value
     const num = this.form.controls['number'].value
@@ -37,8 +39,13 @@ export class CalculatorComponent {
       .subscribe((nominatimRes) => {
           this.getOverpassData(nominatimRes).subscribe((overpassRes) => {
             this.printOnMap(overpassRes, num, radius)
-          }, (e) => {this.form.enable()})
-        }, (e) => {this.form.enable()});
+          }, (e) => {
+            this.loading = false
+            this.form.enable()})
+        }, (e) => {
+        this.loading = false
+        this.form.enable()
+      });
   }
 
   private getOverpassData(data: any): Observable<any> {
@@ -63,6 +70,7 @@ export class CalculatorComponent {
     } catch (e) {
       console.error(e)
     } finally {
+      this.loading = false
       this.form.enable()
     }
   }
