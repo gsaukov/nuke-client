@@ -15,6 +15,7 @@
           <input type="submit" name="calculate" class="calculator-button" value="Calculate"/>
         </div>
       </form>
+      <span *ngIf="errorMessage">{{errorMessage}}</span>
     </div>
   </div>
   <app-loader *ngIf="loading"></app-loader>

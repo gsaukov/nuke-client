@@ -19,6 +19,7 @@ export class CalculatorComponent {
 
   @Input() map!: Map;
   form: FormGroup
+  errorMessage: string|any = null
   loading: boolean = false
 
   constructor(private mapService: MapService, private nominatimService: NominatimService, private overpassService: OverpassService) {
@@ -30,6 +31,7 @@ export class CalculatorComponent {
   }
 
   onSubmit() {
+    this.errorMessage = null
     this.form.disable()
     this.loading = true
     const cityName = this.form.controls['cityName'].value
@@ -39,13 +41,8 @@ export class CalculatorComponent {
       .subscribe((nominatimRes) => {
           this.getOverpassData(nominatimRes).subscribe((overpassRes) => {
             this.printOnMap(overpassRes, num, radius)
-          }, (e) => {
-            this.loading = false
-            this.form.enable()})
-        }, (e) => {
-        this.loading = false
-        this.form.enable()
-      });
+          }, (e) => {this.processError(e)})
+        }, (e) => {this.processError(e)});
   }
 
   private getOverpassData(data: any): Observable<any> {
@@ -68,11 +65,17 @@ export class CalculatorComponent {
       this.mapService.addCircles(this.map, geoJsonObject.features[0] as TurfFeature<(Polygon | MultiPolygon)>, num, radius).subscribe()
       this.mapService.setViewOnGeoJson(this.map, geoJsonObject)
     } catch (e) {
-      console.error(e)
+      this.processError(e as Error)
     } finally {
       this.loading = false
       this.form.enable()
     }
+  }
+
+  private processError(e: Error){
+    this.errorMessage = e.message
+    this.loading = false
+    this.form.enable()
   }
 
 }
