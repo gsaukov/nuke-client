@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import * as turf from '@turf/turf';
 import { BBox } from "@turf/helpers";
 import {Feature, MultiPolygon, Polygon, Point} from "@turf/turf";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +13,7 @@ export class TurfService {
   }
 
   public randomPointInPolygon(polygon: Feature<(Polygon | MultiPolygon)>): Observable<Feature<Point>> {
-    return new Observable((observer) => {
-      const point: Feature<Point> = this.recursiveRandomPointInPolygon(polygon);
-      observer.next(point);
-      observer.complete();
-    });
+    return of(this.recursiveRandomPointInPolygon(polygon));
   }
 
   private recursiveRandomPointInPolygon(polygon: Feature<(Polygon | MultiPolygon)>): Feature<Point> {
@@ -47,10 +43,7 @@ export class TurfService {
   }
 
   public bbox(geojson: any): Observable<BBox> {
-    return new Observable((observer) => {
-      observer.next(turf.bbox(geojson));
-      observer.complete();
-    });
+    return of(turf.bbox(geojson));
   }
 
 }
