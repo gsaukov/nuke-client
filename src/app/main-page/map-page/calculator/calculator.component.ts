@@ -5,8 +5,8 @@ import {NominatimService} from "../../../services/nominatim.service";
 import {OverpassService} from "../../../services/overpass.service";
 import {MapService} from "../../../services/map.service";
 import {Feature as TurfFeature, MultiPolygon, Polygon} from "@turf/turf";
-import {finalize, Observable} from "rxjs";
-import { catchError, mergeMap } from 'rxjs/operators';
+import {finalize, Observable, zip} from "rxjs";
+import {catchError, mergeMap} from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as osm2geojson from 'osm2geojson-lite';
 
@@ -66,14 +66,14 @@ export class CalculatorComponent {
     return this.COUNTRY_ID_PREFIX + formatted;
   }
 
-  private printOnMap(overpassRes: any, num: number, radius: number): Observable<void> {
-    return of(overpassRes).pipe(
-      mergeMap(overpassData => {
-          let geoJsonObject = osm2geojson(overpassData, { completeFeature: true });
-          return this.mapService.addGeometryLayer(this.map, geoJsonObject).pipe(
-            mergeMap(() => this.mapService.addCircles(this.map, geoJsonObject.features[0] as TurfFeature<(Polygon | MultiPolygon)>, num, radius)),
-            mergeMap(() => this.mapService.setViewOnGeoJson(this.map, geoJsonObject)),
-          );
+  private printOnMap(overpassRes: any, num: number, radius: number): Observable<unknown[]> {
+    return of(osm2geojson(overpassRes, { completeFeature: true })).pipe(
+      mergeMap(geoJsonObject => {
+        return zip(
+          this.mapService.addGeometryLayer(this.map, geoJsonObject),
+          this.mapService.addCircles(this.map, geoJsonObject.features[0] as TurfFeature<(Polygon | MultiPolygon)>, num, radius),
+          this.mapService.setViewOnGeoJson(this.map, geoJsonObject)
+        );
       })
     );
   }
