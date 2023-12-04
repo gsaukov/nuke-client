@@ -88,11 +88,15 @@ export class MapService {
     });
   }
 
-  setViewOnGeoJson(map: Map, geoJsonObject: any) {
-    this.turfService.bbox(geoJsonObject).subscribe(bbox => {
-        map.getView().fit(transformExtent(bbox, 'EPSG:4326', map.getView().getProjection()), {size: map.getSize()});
-      }
-    )
+  setViewOnGeoJson(map: Map, geoJsonObject: any): Observable<void> {
+    return new Observable((observer) => {
+      this.turfService.bbox(geoJsonObject).subscribe(bbox => {
+          map.getView().fit(transformExtent(bbox, 'EPSG:4326', map.getView().getProjection()), {size: map.getSize()});
+        }
+      )
+      observer.next();
+      observer.complete();
+    });
   }
 
   radialGraientStylre(): Observable<Style> {
