@@ -74,24 +74,39 @@ export class MapService {
   }
 
   addCircles(map: Map, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number): Observable<void> {
-      const vectorSource = new VectorSource();
-      const layer = new Vector({source: vectorSource,});
-      map.addLayer(layer);
-      return of(this.addCirclesToVector(vectorSource, polygon, num, radius))
-    }
-
-  private addCirclesToVector (vectorSource: VectorSource, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number) {
-    console.log("addCircles start" + new Date().getMilliseconds())
-    const style = this.radialGraientStylre()
-    for (let i = 0; i < num; i++) {
-      this.turfService.randomPointInPolygon(polygon).subscribe(p => {
-        let coord = p.geometry.coordinates;
-        const circleFeature = new Feature(new Circle(fromLonLat(coord, 'EPSG:3857'), radius));
-        circleFeature.setStyle(style);
-        vectorSource.addFeature(circleFeature);
-      })
-    }
+    const vectorSource = new VectorSource();
+    const layer = new Vector({source: vectorSource,});
+    map.addLayer(layer);
+    return of(this.addCirclesToVector(vectorSource, polygon, num, radius))
   }
+
+  private addCirclesToVector(vectorSource:VectorSource, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number) {
+    const worker = new Worker(new URL('./workers/random-points.worker', import.meta.url));
+    worker.onmessage = ({ data }) => {
+      if(data.isComplete){
+        this.putPoints(data.result, radius, vectorSource);
+      } else {
+        console.log("Points from worker:" + JSON.stringify(data))
+      }
+    };
+    worker.postMessage({
+      num: num,
+      polygon: polygon
+    });
+  }
+
+  private putPoints(points:any, radius: number, vectorSource:VectorSource) {
+    const style = this.radialGradientStylre()
+    const circleFeatures: Feature<Circle>[] = []
+    for (let i = 0; i < points.length; i++) {
+      let coord = points[i].geometry.coordinates;
+      const circleFeature = new Feature(new Circle(fromLonLat(coord, 'EPSG:3857'), radius));
+      circleFeature.setStyle(style);
+      circleFeatures.push(circleFeature)
+    }
+    vectorSource.addFeatures(circleFeatures);
+  }
+
 
   setViewOnGeoJson(map: Map, geoJsonObject: any): Observable<void> {
     return new Observable((observer) => {
@@ -104,7 +119,7 @@ export class MapService {
     });
   }
 
-  radialGraientStylre(): Style {
+  radialGradientStylre(): Style {
     return new Style({
       renderer(coordinates: any, state: any) {
         const [[x, y], [x1, y1]] = coordinates;
