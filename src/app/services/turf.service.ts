@@ -12,11 +12,19 @@ export class TurfService {
   constructor() {
   }
 
-  public randomPointInPolygon(polygon: Feature<(Polygon | MultiPolygon)>): Observable<Feature<Point>> {
-    return of(this.recursiveRandomPointInPolygon(polygon));
+  public randomPointsInPolygon(num: number, polygon: Feature<(Polygon | MultiPolygon)>): Feature<Point>[] {
+    const points: Feature<Point>[] = []
+    for(let i = 0; i < num; i++ ) {
+      points[i] = TurfService.recursiveRandomPointInPolygon(polygon)
+    }
+    return points
   }
 
-  private recursiveRandomPointInPolygon(polygon: Feature<(Polygon | MultiPolygon)>): Feature<Point> {
+  public randomPointInPolygon(polygon: Feature<(Polygon | MultiPolygon)>): Observable<Feature<Point>> {
+    return of(TurfService.recursiveRandomPointInPolygon(polygon));
+  }
+
+  public static recursiveRandomPointInPolygon(polygon: Feature<(Polygon | MultiPolygon)>): Feature<Point> {
     //bbox extent in minX, minY, maxX, maxY order
     const bounds = turf.bbox(polygon)
     const x_min = bounds[0];
