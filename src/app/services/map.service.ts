@@ -14,6 +14,7 @@ import {Feature} from "ol";
 import {Circle} from "ol/geom";
 import {Observable, of} from "rxjs";
 import {TurfService} from "./turf.service";
+import {ScaleLine, defaults} from "ol/control";
 
 
 @Injectable({
@@ -27,6 +28,9 @@ export class MapService {
   buildMap(): Observable<Map> {
     return new Observable((observer) => {
       const map = new Map({
+        controls: defaults().extend([new ScaleLine({
+          units: 'metric',
+        })]),
         view: new View({
           center: fromLonLat([69.2787079, 41.3123363], 'EPSG:3857'),
           zoom: 12,
@@ -34,7 +38,8 @@ export class MapService {
         layers: [
           new TileLayer({
             source: new OSM({
-              attributions: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+              attributions: '<a href="https://gsaukov.netlify.app/">Georgy Saukov</a> &copy; ' +
+                '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             }),
           }),
         ],
