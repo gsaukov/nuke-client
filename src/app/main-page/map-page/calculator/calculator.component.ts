@@ -56,7 +56,6 @@ export class CalculatorComponent {
   }
 
   private getOverpassData(data: any): Observable<any> {
-    console.log(data)
     const countryId = this.getOverpassCountryId(data[0].osm_id)
     return this.overpassService.getGeometryData(countryId);
   }

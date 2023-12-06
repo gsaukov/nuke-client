@@ -9,7 +9,7 @@ import VectorSource from "ol/source/Vector";
 import {Vector} from "ol/layer";
 import {Fill, Stroke, Style} from "ol/style";
 import {Feature as TurfFeature} from "@turf/helpers/dist/js/lib/geojson";
-import {MultiPolygon, Polygon} from "@turf/turf";
+import {MultiPolygon, Point, Polygon} from "@turf/turf";
 import {Feature} from "ol";
 import {Circle} from "ol/geom";
 import {Observable, of} from "rxjs";
@@ -84,7 +84,7 @@ export class MapService {
     const worker = new Worker(new URL('./workers/random-points.worker', import.meta.url));
     worker.onmessage = ({ data }) => {
       if(data.isComplete){
-        this.putPoints(data.result, radius, vectorSource);
+        this.putPoints(vectorSource, data.result, radius);
       } else {
         console.log("Points from worker:" + JSON.stringify(data))
       }
@@ -95,7 +95,7 @@ export class MapService {
     });
   }
 
-  private putPoints(points:any, radius: number, vectorSource:VectorSource) {
+  private putPoints(vectorSource:VectorSource, points: TurfFeature<Point>[], radius: number,) {
     const style = this.radialGradientStylre()
     const circleFeatures: Feature<Circle>[] = []
     for (let i = 0; i < points.length; i++) {
