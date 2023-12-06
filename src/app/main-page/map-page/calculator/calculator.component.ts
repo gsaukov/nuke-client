@@ -70,7 +70,7 @@ export class CalculatorComponent {
       mergeMap(geoJsonObject => {
         return zip(
           this.mapService.addGeometryLayer(this.map, geoJsonObject),
-          this.mapService.addCircles(this.map, geoJsonObject.features[0] as TurfFeature<(Polygon | MultiPolygon)>, num, radius),
+          this.mapService.addCircles(this.map, geoJsonObject.features[0] as TurfFeature<(Polygon | MultiPolygon)>, num, radius, this.handlerCompletionCallBack),
           this.mapService.setViewOnGeoJson(this.map, geoJsonObject)
         );
       })
@@ -81,6 +81,11 @@ export class CalculatorComponent {
     this.errorMessage = e.message
     this.loading = false
     this.form.enable()
+  }
+
+  handlerCompletionCallBack = () => {
+    this.loading = false;
+    this.form.enable();
   }
 
 }

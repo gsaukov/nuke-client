@@ -50,6 +50,10 @@ export class MapService {
     });
   }
 
+  randomPointsWorker(): Worker {
+    return new Worker(new URL('./workers/random-points.worker', import.meta.url));
+  }
+
   addGeometryLayer(map: Map, geoJsonObject: any): Observable<void> {
     return new Observable((observer) => {
       const geojsonFormat = new GeoJSON();
@@ -73,18 +77,19 @@ export class MapService {
     });
   }
 
-  addCircles(map: Map, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number): Observable<void> {
+  addCircles(map: Map, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number, handlerCompletionCallBack: any): Observable<void> {
     const vectorSource = new VectorSource();
     const layer = new Vector({source: vectorSource,});
     map.addLayer(layer);
-    return of(this.addCirclesToVector(vectorSource, polygon, num, radius))
+    return of(this.addCirclesToVector(vectorSource, polygon, num, radius, handlerCompletionCallBack))
   }
 
-  private addCirclesToVector(vectorSource:VectorSource, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number) {
+  private addCirclesToVector(vectorSource:VectorSource, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number, handlerCompletionCallBack: any) {
     const worker = new Worker(new URL('./workers/random-points.worker', import.meta.url));
     worker.onmessage = ({ data }) => {
       if(data.isComplete){
         this.putPoints(vectorSource, data.result, radius);
+        handlerCompletionCallBack();
       } else {
         console.log("Points from worker:" + JSON.stringify(data))
       }
