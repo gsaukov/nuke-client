@@ -75,19 +75,19 @@ export class MapService {
     });
   }
 
-  addCircles(map: Map, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number, handlerCompletionCallBack: any): Observable<void> {
+  addCircles(map: Map, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number, workerCallBacks: any): Observable<void> {
     const vectorSource = new VectorSource();
     const layer = new Vector({source: vectorSource,});
     map.addLayer(layer);
-    return of(this.addCirclesToVector(vectorSource, polygon, num, radius, handlerCompletionCallBack))
+    return of(this.addCirclesToVector(vectorSource, polygon, num, radius, workerCallBacks))
   }
 
-  private addCirclesToVector(vectorSource:VectorSource, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number, handlerCompletionCallBack: any) {
+  private addCirclesToVector(vectorSource:VectorSource, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number, workerCallBacks: any) {
     this.worker = this.randomPointsWorker();
     this.worker.onmessage = ({ data }) => {
       if(data.isComplete){
         this.putPoints(vectorSource, data.result, radius);
-        handlerCompletionCallBack();
+        workerCallBacks.onComplete();
       } else {
         console.log("Points from worker:" + JSON.stringify(data))
       }

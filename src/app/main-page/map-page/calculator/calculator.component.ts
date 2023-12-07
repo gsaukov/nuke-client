@@ -24,6 +24,7 @@ export class CalculatorComponent {
   errorMessage: string|any = null
   loading: boolean = false
   working: boolean = false
+  progressData: any = null;
 
   constructor(private mapService: MapService, private nominatimService: NominatimService, private overpassService: OverpassService) {
     this.form = new FormGroup({
@@ -73,11 +74,15 @@ export class CalculatorComponent {
         this.working = true;
         return zip(
           this.mapService.addGeometryLayer(this.map, geoJsonObject),
-          this.mapService.addCircles(this.map, geoJsonObject.features[0] as TurfFeature<(Polygon | MultiPolygon)>, num, radius, this.handlerCompletionCallBack),
+          this.mapService.addCircles(this.map, geoJsonObject.features[0] as TurfFeature<(Polygon | MultiPolygon)>, num, radius, this.workerCallBacks),
           this.mapService.setViewOnGeoJson(this.map, geoJsonObject)
         );
       })
     );
+  }
+
+  private trackProgress(data: any) {
+    this.progressData = data;
   }
 
   private processError(e: Error){
@@ -91,12 +96,22 @@ export class CalculatorComponent {
     this.form.enable()
   }
 
-  handlerCompletionCallBack = () => {
+  terminateWorker() {
+    this.mapService.terminateRandomPointsWorker()
     this.complete()
   }
 
-  terminate() {
-    this.mapService.terminateRandomPointsWorker()
-    this.complete()
+  private workerCallBacks = {
+    onComplete: () => {
+      this.complete()
+    },
+
+    onError: (e:Error) => {
+      this.processError(e)
+    },
+
+    onProgress: (data: any) => {
+      this.trackProgress(data)
+    }
   }
 }

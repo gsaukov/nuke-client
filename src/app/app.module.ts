@@ -7,7 +7,7 @@ import {MapPageComponent} from './main-page/map-page/map-page.component';
 import {HttpClientModule} from "@angular/common/http";
 import { CalculatorComponent } from './main-page/map-page/calculator/calculator.component';
 import {ReactiveFormsModule} from "@angular/forms";
-import {LoaderComponent} from "./main-page/loader/loader.component";
+import {LoaderComponent} from "./main-page/map-page/calculator/loader/loader.component";
 
 @NgModule({
   declarations: [
