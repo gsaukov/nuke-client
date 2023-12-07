@@ -15,6 +15,7 @@ import {Circle} from "ol/geom";
 import {Observable, of} from "rxjs";
 import {TurfService} from "./turf.service";
 import {ScaleLine, defaults} from "ol/control";
+import {IWorkerCallbacks} from "../main-page/map-page/calculator/calculator.component";
 
 
 @Injectable({
@@ -82,15 +83,18 @@ export class MapService {
     return of(this.addCirclesToVector(vectorSource, polygon, num, radius, workerCallBacks))
   }
 
-  private addCirclesToVector(vectorSource:VectorSource, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number, workerCallBacks: any) {
+  private addCirclesToVector(vectorSource:VectorSource, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number, workerCallBacks: IWorkerCallbacks) {
     this.worker = this.randomPointsWorker();
     this.worker.onmessage = ({ data }) => {
       if(data.isComplete){
         this.putPoints(vectorSource, data.result, radius);
         workerCallBacks.onComplete();
       } else {
-        console.log("Points from worker:" + JSON.stringify(data))
+        workerCallBacks.onProgress(data);
       }
+    };
+    this.worker.onerror = ( e ) => {
+      workerCallBacks.onError(e);
     };
     this.worker.postMessage({
       num: num,

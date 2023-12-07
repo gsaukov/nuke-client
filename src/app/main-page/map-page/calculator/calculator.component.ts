@@ -4,11 +4,25 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {NominatimService} from "../../../services/nominatim.service";
 import {OverpassService} from "../../../services/overpass.service";
 import {MapService} from "../../../services/map.service";
-import {Feature as TurfFeature, MultiPolygon, Polygon} from "@turf/turf";
+import {Feature as TurfFeature, MultiPolygon, Point, Polygon} from "@turf/turf";
 import {finalize, Observable, zip} from "rxjs";
 import {catchError, mergeMap} from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as osm2geojson from 'osm2geojson-lite';
+
+export interface IWorkerCallbacks {
+  onComplete: () => void;
+  onError: (e: ErrorEvent) => void;
+  onProgress: (data: TurfFeature<Point>[]) => void;
+}
+
+export interface ICalculationResults {
+  placeName: string;
+  placeID?: number;
+  eventsRadius: number;
+  eventsNumber: number;
+  eventsNumberProgress: number;
+}
 
 @Component({
   selector: 'app-calculator',
@@ -24,7 +38,7 @@ export class CalculatorComponent {
   errorMessage: string|any = null
   loading: boolean = false
   working: boolean = false
-  progressData: any = null;
+  calculationResults!: ICalculationResults|null;
 
   constructor(private mapService: MapService, private nominatimService: NominatimService, private overpassService: OverpassService) {
     this.form = new FormGroup({
@@ -41,6 +55,7 @@ export class CalculatorComponent {
     const cityName = this.form.controls['cityName'].value
     const radius = this.form.controls['radius'].value
     const num = this.form.controls['number'].value
+    this.calculationResults = this.newCalculationResults(cityName, radius, num)
 
     of(cityName).pipe(
       mergeMap((cityName)=> this.nominatimService.getCityData(cityName)),
@@ -81,12 +96,22 @@ export class CalculatorComponent {
     );
   }
 
-  private trackProgress(data: any) {
-    this.progressData = data;
+  private newCalculationResults(placeName: string, eventsRadius: number, eventsNumber: number):ICalculationResults {
+    return {
+      placeName: placeName,
+      eventsRadius: eventsRadius,
+      eventsNumber: eventsNumber,
+      eventsNumberProgress: 0,
+    }
+  }
+
+  private trackProgress(data: TurfFeature<Point>[]) {
+    this.calculationResults!.eventsNumberProgress = data.length;
   }
 
   private processError(e: Error){
     this.errorMessage = e.message
+    this.calculationResults = null
     this.complete()
   }
 
@@ -101,13 +126,13 @@ export class CalculatorComponent {
     this.complete()
   }
 
-  private workerCallBacks = {
+  private workerCallBacks: IWorkerCallbacks = {
     onComplete: () => {
       this.complete()
     },
 
-    onError: (e:Error) => {
-      this.processError(e)
+    onError: (e:ErrorEvent) => {
+      this.processError(e.error)
     },
 
     onProgress: (data: any) => {
