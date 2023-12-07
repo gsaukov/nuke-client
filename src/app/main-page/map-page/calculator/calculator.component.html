@@ -11,8 +11,13 @@
         <div class="form-group">
           <input #radius type="number" class="calculator-control" formControlName="radius" placeholder="Radius of event" autocomplete="off" [required]="true"/>
         </div>
-        <div class="form-group form-button">
-          <input type="submit" name="calculate" class="calculator-button" value="Calculate"/>
+        <div class='parent' style="white-space: nowrap;">
+          <div class="form-group form-button" style="float: left;">
+            <input type="submit" name="calculate" class="calculator-button" value="Calculate"/>
+          </div>
+          <div class="form-group form-button" style="float: right;">
+            <input type="button" name="terminate" class="calculator-button" (click)="terminate()" value="Terminate" [disabled]="!working"/>
+          </div>
         </div>
       </form>
       <span *ngIf="errorMessage">{{errorMessage}}</span>

@@ -23,6 +23,7 @@ export class CalculatorComponent {
   form: FormGroup
   errorMessage: string|any = null
   loading: boolean = false
+  working: boolean = false
 
   constructor(private mapService: MapService, private nominatimService: NominatimService, private overpassService: OverpassService) {
     this.form = new FormGroup({
@@ -49,8 +50,9 @@ export class CalculatorComponent {
         return of(null);
       }),
       finalize(() => {
-        this.loading = false;
-        this.form.enable()
+        // Empty. Completion should be performed in randomPointsWorker.
+        // this.loading = false;
+        // this.form.enable()
       })
     ).subscribe();
   }
@@ -68,6 +70,7 @@ export class CalculatorComponent {
   private printOnMap(overpassRes: any, num: number, radius: number): Observable<unknown[]> {
     return of(osm2geojson(overpassRes, { completeFeature: true })).pipe(
       mergeMap(geoJsonObject => {
+        this.working = true;
         return zip(
           this.mapService.addGeometryLayer(this.map, geoJsonObject),
           this.mapService.addCircles(this.map, geoJsonObject.features[0] as TurfFeature<(Polygon | MultiPolygon)>, num, radius, this.handlerCompletionCallBack),
@@ -79,13 +82,21 @@ export class CalculatorComponent {
 
   private processError(e: Error){
     this.errorMessage = e.message
+    this.complete()
+  }
+
+  private complete(){
+    this.working = false;
     this.loading = false
     this.form.enable()
   }
 
   handlerCompletionCallBack = () => {
-    this.loading = false;
-    this.form.enable();
+    this.complete()
   }
 
+  terminate() {
+    this.mapService.terminateRandomPointsWorker()
+    this.complete()
+  }
 }

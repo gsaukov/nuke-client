@@ -22,6 +22,8 @@ import {ScaleLine, defaults} from "ol/control";
 })
 export class MapService {
 
+  private worker!: Worker;
+
   constructor(private turfService: TurfService) {
   }
 
@@ -48,10 +50,6 @@ export class MapService {
       observer.next(map);
       observer.complete();
     });
-  }
-
-  randomPointsWorker(): Worker {
-    return new Worker(new URL('./workers/random-points.worker', import.meta.url));
   }
 
   addGeometryLayer(map: Map, geoJsonObject: any): Observable<void> {
@@ -85,8 +83,8 @@ export class MapService {
   }
 
   private addCirclesToVector(vectorSource:VectorSource, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number, handlerCompletionCallBack: any) {
-    const worker = new Worker(new URL('./workers/random-points.worker', import.meta.url));
-    worker.onmessage = ({ data }) => {
+    this.worker = this.randomPointsWorker();
+    this.worker.onmessage = ({ data }) => {
       if(data.isComplete){
         this.putPoints(vectorSource, data.result, radius);
         handlerCompletionCallBack();
@@ -94,7 +92,7 @@ export class MapService {
         console.log("Points from worker:" + JSON.stringify(data))
       }
     };
-    worker.postMessage({
+    this.worker.postMessage({
       num: num,
       polygon: polygon
     });
@@ -152,6 +150,16 @@ export class MapService {
         // ctx.stroke();
       },
     })
+  }
+
+  randomPointsWorker(): Worker {
+    return new Worker(new URL('./workers/random-points.worker', import.meta.url));
+  }
+
+  terminateRandomPointsWorker(): void {
+    if(this.worker){
+      this.worker.terminate()
+    }
   }
 
 }
