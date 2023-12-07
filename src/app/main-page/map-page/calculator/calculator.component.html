@@ -20,9 +20,9 @@
           </div>
         </div>
       </form>
-      <span *ngIf="errorMessage">{{errorMessage}}</span>
     </div>
+    <app-results></app-results>
+    <span *ngIf="errorMessage">{{errorMessage}}</span>
   </div>
   <app-loader *ngIf="loading"></app-loader>
-<!--  <app-progress *ngIf="loading"></app-progress>-->
 </div>

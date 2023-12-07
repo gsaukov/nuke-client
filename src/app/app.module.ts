@@ -8,6 +8,7 @@ import {HttpClientModule} from "@angular/common/http";
 import { CalculatorComponent } from './main-page/map-page/calculator/calculator.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import {LoaderComponent} from "./main-page/map-page/calculator/loader/loader.component";
+import { ResultsComponent } from './main-page/map-page/calculator/results/results.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import {LoaderComponent} from "./main-page/map-page/calculator/loader/loader.com
     MainPageComponent,
     MapPageComponent,
     CalculatorComponent,
-    LoaderComponent
+    LoaderComponent,
+    ResultsComponent
   ],
   imports: [
     BrowserModule,

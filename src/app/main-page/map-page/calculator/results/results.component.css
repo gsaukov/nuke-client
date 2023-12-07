@@ -1,0 +1,15 @@
+.header-column {
+  white-space: nowrap;
+}
+
+.results-table {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 2em;
+  font-size: 0.8rem;
+}
+
+td {
+  padding: 4px 8px;
+}
