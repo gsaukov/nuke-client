@@ -1,8 +1,11 @@
 import {Feature, MultiPolygon, Point, Polygon} from "@turf/turf";
 import * as turf from "@turf/turf";
 
-export function recursiveRandomPointInPolygon(polygon: Feature<(Polygon | MultiPolygon)>): Feature<Point> {
+export function recursiveRandomPointInPolygon(polygon: Feature<(Polygon | MultiPolygon)>, depth: number = 500): Feature<Point> {
   //bbox extent in minX, minY, maxX, maxY order
+  if(depth <= 0) {
+    throw new Error('Random point calculation recursion depth limit reached')
+  }
   const bounds = turf.bbox(polygon)
   const x_min = bounds[0];
   const y_min = bounds[1];
@@ -23,6 +26,6 @@ export function recursiveRandomPointInPolygon(polygon: Feature<(Polygon | MultiP
   if (inside) {
     return point
   } else {
-    return recursiveRandomPointInPolygon(polygon)
+    return recursiveRandomPointInPolygon(polygon, depth-1)
   }
 }
