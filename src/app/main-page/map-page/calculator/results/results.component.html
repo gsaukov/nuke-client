@@ -1,17 +1,49 @@
-<table class="results-table">
+<table class="results-table" *ngIf="calculationResults">
   <tbody>
   <tr>
     <td class="header-column">
-      Events:
+      Place Name
     </td>
     <td>
       :
     </td>
     <td>
-       #
+      {{calculationResults.placeName}}
     </td>
   </tr>
-
+  <tr>
+    <td class="header-column">
+      Events #
+    </td>
+    <td>
+      :
+    </td>
+    <td>
+      {{calculationResults.eventsNumber}}
+    </td>
+  </tr>
+  <tr>
+    <td class="header-column">
+      Event radius
+    </td>
+    <td>
+      :
+    </td>
+    <td>
+      {{calculationResults.eventsRadius}}
+    </td>
+  </tr>
+  <tr>
+    <td class="header-column">
+      Generated
+    </td>
+    <td>
+      :
+    </td>
+    <td>
+      {{calculationResults.eventsNumberProgress}}
+    </td>
+  </tr>
   </tbody>
 </table>
 

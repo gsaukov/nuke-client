@@ -90,7 +90,7 @@ export class MapService {
         this.putPoints(vectorSource, data.result, radius);
         workerCallBacks.onComplete();
       } else {
-        workerCallBacks.onProgress(data);
+        workerCallBacks.onProgress(data.result);
       }
     };
     this.worker.onerror = ( e ) => {

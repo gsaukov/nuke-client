@@ -135,7 +135,7 @@ export class CalculatorComponent {
       this.processError(e.error)
     },
 
-    onProgress: (data: any) => {
+    onProgress: (data: TurfFeature<Point>[]) => {
       this.trackProgress(data)
     }
   }

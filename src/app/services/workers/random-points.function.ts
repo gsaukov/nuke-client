@@ -7,9 +7,9 @@ export function randomPointsInPolygon(num: number, polygon: Feature<(Polygon | M
   for(let i = 0; i < num; i++ ) {
     points[i] = recursiveRandomPointInPolygon(polygon)
     if(i%100===0){
-      self.postMessage({isComplete: false, message: i});
+      self.postMessage({isComplete: false, message: i, result: points});
     }
   }
-  self.postMessage({isComplete: false, message: num});
+  self.postMessage({isComplete: false, message: num, result: points});
   return {isComplete: true, result: points};
 }
