@@ -25,8 +25,12 @@ export class TurfService {
     return of(recursiveRandomPointInPolygon(polygon));
   }
 
-  public bbox(geojson: any): Observable<BBox> {
-    return of(turf.bbox(geojson));
+  public bbox(geojson: any): BBox {
+    return turf.bbox(geojson);
+  }
+
+  public area(polygon: any): number {
+    return turf.area(turf.polygon(polygon));
   }
 
 }
