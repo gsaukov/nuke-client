@@ -132,7 +132,7 @@ export class CalculatorComponent {
     },
 
     onError: (e:ErrorEvent) => {
-      this.processError(e.error)
+      this.processError(Error(e.message))
     },
 
     onProgress: (data: TurfFeature<Point>[]) => {
