@@ -41,10 +41,15 @@ function describePolygons(feature: Feature<(Polygon | MultiPolygon)>): IPolygonD
   const polygonsDesc: IPolygonDesc[] = []
   let totalArea = 0
   const polygons = feature.geometry.coordinates
-  for (let n = 0; n < polygons.length; n++) {
-    const polygonDesc = createPolygonDesc(polygons[n] as Position[][])
-    totalArea = totalArea + polygonDesc.area
-    polygonsDesc.push(polygonDesc)
+  let t = 'type'
+  if(feature.geometry.type === 'MultiPolygon') {
+    for (let n = 0; n < polygons.length; n++) {
+      const polygonDesc = createPolygonDesc(polygons[n] as Position[][])
+      totalArea = totalArea + polygonDesc.area
+      polygonsDesc.push(polygonDesc)
+    }
+  } else { // Polygon
+    polygonsDesc.push(createPolygonDesc(polygons as Position[][]))
   }
   polygonsDesc.forEach(e => e.weight = e.area/totalArea )
   return polygonsDesc;
