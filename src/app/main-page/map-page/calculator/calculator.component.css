@@ -134,3 +134,8 @@
 select:invalid {
   color: #999 !important;
 }
+
+span {
+  padding: 1rem;
+  font-size: 0.5rem;
+}
