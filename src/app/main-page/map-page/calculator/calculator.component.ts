@@ -42,6 +42,7 @@ export class CalculatorComponent {
 
   constructor(private mapService: MapService, private nominatimService: NominatimService, private overpassService: OverpassService) {
     this.form = new FormGroup({
+      placeArea: new FormControl(null, [Validators.required]),
       cityName: new FormControl(null, [Validators.required]),
       radius: new FormControl(null, [Validators.required]),
       number: new FormControl(null, [Validators.required]),
