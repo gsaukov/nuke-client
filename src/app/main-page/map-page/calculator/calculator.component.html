@@ -22,7 +22,7 @@
       </form>
     </div>
     <app-results [calculationResults]="calculationResults"></app-results>
-    <span *ngIf="errorMessage">{{errorMessage}}</span>
+    <span *ngIf="errorMessage"><p style="color:red; font-weight: bolder">Exception:</p>{{errorMessage}}</span>
   </div>
   <app-loader *ngIf="loading"></app-loader>
 </div>

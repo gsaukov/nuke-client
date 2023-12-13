@@ -33,10 +33,9 @@
 
 .calculator-form {
   padding-top: 4em;
-  padding-bottom: 1em;
   width: 72%;
   overflow: hidden;
-  margin-left: 3.5em;
+  margin-left: 3em;
 }
 
 .form-group {
@@ -136,6 +135,7 @@ select:invalid {
 }
 
 span {
-  padding: 1rem;
-  font-size: 0.5rem;
+  padding: 0 1rem 1rem 1rem;
+  display:inline-block;
+  font-size: 0.6rem;
 }
