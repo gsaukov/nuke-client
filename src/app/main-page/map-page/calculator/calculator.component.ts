@@ -42,8 +42,8 @@ export class CalculatorComponent {
 
   constructor(private mapService: MapService, private nominatimService: NominatimService, private overpassService: OverpassService) {
     this.form = new FormGroup({
-      placeArea: new FormControl(null, [Validators.required]),
-      cityName: new FormControl(null, [Validators.required]),
+      placeType: new FormControl(null, [Validators.required]),
+      placeName: new FormControl(null, [Validators.required]),
       radius: new FormControl(null, [Validators.required]),
       number: new FormControl(null, [Validators.required]),
     })
@@ -53,13 +53,13 @@ export class CalculatorComponent {
     this.errorMessage = null
     this.form.disable()
     this.loading = true
-    const cityName = this.form.controls['cityName'].value
+    const placeName = this.form.controls['placeName'].value
     const radius = this.form.controls['radius'].value
     const num = this.form.controls['number'].value
-    this.calculationResults = this.newCalculationResults(cityName, radius, num)
+    this.calculationResults = this.newCalculationResults(placeName, radius, num)
 
-    of(cityName).pipe(
-      mergeMap((cityName)=> this.nominatimService.getCityData(cityName)),
+    of(placeName).pipe(
+      mergeMap((placeName)=> this.nominatimService.searchPlace(placeName)),
       mergeMap(nominatimRes => this.getOverpassData(nominatimRes)),
       mergeMap(overpassRes => this.printOnMap(overpassRes, num, radius)),
       catchError(e => {

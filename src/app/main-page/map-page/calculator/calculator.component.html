@@ -3,8 +3,8 @@
     <div class="calculator-form">
       <form [formGroup]="form" (ngSubmit)="onSubmit()" ngNativeValidate>
         <div class="form-group">
-          <select [required]="true" class="calculator-control" formControlName="placeArea">
-            <option value="" [disabled]="true" [selected]="true" [hidden]="true">Select place</option>
+          <select [required]="true" class="calculator-control" formControlName="placeType">
+            <option value="" [disabled]="true" [selected]="true" [hidden]="true">Select place type</option>
             <option value="city">City</option>
             <option value="county">County</option>
             <option value="state">State</option>
@@ -12,7 +12,7 @@
           </select>
         </div>
         <div class="form-group">
-          <input #cityName type="text" class="calculator-control" formControlName="cityName" placeholder="Place name or coordinates" autocomplete="off" [required]="true"/>
+          <input #placeName type="text" class="calculator-control" formControlName="placeName" placeholder="Place name or coordinates" autocomplete="off" [required]="true"/>
         </div>
         <div class="form-group">
           <input #number type="number" class="calculator-control" formControlName="number" placeholder="Number of events" autocomplete="off" [required]="true"/>
