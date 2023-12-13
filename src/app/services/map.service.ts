@@ -41,8 +41,8 @@ export class MapService {
         layers: [
           new TileLayer({
             source: new OSM({
-              attributions: '<a href="https://gsaukov.netlify.app/">Georgy Saukov</a> &copy; ' +
-                '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+              attributions: '<a href="https://gsaukov.netlify.app/" target="_blank" style="color:blue;">Georgy Saukov</a> &copy; ' +
+                '<a href="https://www.openstreetmap.org/copyright" target="_blank" style="color:blue;">OpenStreetMap</a> contributors',
             }),
           }),
         ],
