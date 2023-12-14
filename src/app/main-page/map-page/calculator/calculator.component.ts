@@ -53,13 +53,14 @@ export class CalculatorComponent {
     this.errorMessage = null
     this.form.disable()
     this.loading = true
+    const placeType = this.form.controls['placeType'].value
     const placeName = this.form.controls['placeName'].value
     const radius = this.form.controls['radius'].value
     const num = this.form.controls['number'].value
     this.calculationResults = this.newCalculationResults(placeName, radius, num)
 
     of(placeName).pipe(
-      mergeMap((placeName)=> this.nominatimService.searchPlace(placeName)),
+      mergeMap((placeName)=> this.nominatimService.searchPlace(placeType, placeName)),
       mergeMap(nominatimRes => this.getOverpassData(nominatimRes)),
       mergeMap(overpassRes => this.printOnMap(overpassRes, num, radius)),
       catchError(e => {
