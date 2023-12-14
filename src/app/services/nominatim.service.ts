@@ -12,8 +12,8 @@ export class NominatimService {
   constructor(private http: HttpClient) {
   }
 
-  searchPlace(placeName: string): Observable<any> {
-    return this.http.get<any>(`${API_URL}/search?X-Requested-With=overpass-turbo&format=json&q=${placeName}`)
+  searchPlace(placeType: string, placeName: string): Observable<any> {
+    return this.http.get<any>(`${API_URL}/search?X-Requested-With=overpass-turbo&format=json&${placeType}=${placeName}`)
   }
 
 }
