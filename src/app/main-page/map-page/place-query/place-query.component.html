@@ -1,0 +1,20 @@
+<div class="place-query-container">
+  <form class="place-query-form" [formGroup]="form" (ngSubmit)="onSubmit()" ngNativeValidate>
+    <div class="form-element">
+      <select [required]="true" class="place-query-control" formControlName="placeType">
+        <option value="" [disabled]="true" [selected]="true" [hidden]="true">Select place type</option>
+        <option value="city">City</option>
+        <option value="county">County</option>
+        <option value="state">State</option>
+        <option value="country">Country</option>
+        <option value="q">Any...</option>
+      </select>
+    </div>
+    <div class="form-element">
+      <input #placeName type="text" class="place-query-control" formControlName="placeName" placeholder="Place name or coordinates" autocomplete="off" [required]="true"/>
+    </div>
+    <div class="form-element">
+      <input type="submit" name="calculate" class="place-query-button" value="Calculate"/>
+    </div>
+  </form>
+</div>

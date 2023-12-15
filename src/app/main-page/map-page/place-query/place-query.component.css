@@ -1,0 +1,11 @@
+.place-query-container {
+  position: absolute;
+  left: 4em;
+}
+
+.place-query-form {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
