@@ -1,7 +1,5 @@
-<script src="calculator.component.ts"></script>
-<div class="calculator-container">
-  <div class="calculator-content backdrop-blur">
-    <div class="calculator-form">
+<div class="calculator-container backdrop-blur">
+  <div class="calculator-form">
       <form [formGroup]="form" (ngSubmit)="onSubmit()" ngNativeValidate>
         <div class="form-group">
           <select [required]="true" class="calculator-control" formControlName="placeType">
@@ -31,7 +29,6 @@
           </div>
         </div>
       </form>
-    </div>
     <app-results [calculationResults]="calculationResults"></app-results>
     <span *ngIf="errorMessage"><p style="color:red; font-weight: bolder">Exception:</p>{{errorMessage}}</span>
   </div>
