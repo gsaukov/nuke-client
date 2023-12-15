@@ -9,6 +9,7 @@ import { CalculatorComponent } from './main-page/map-page/calculator/calculator.
 import {ReactiveFormsModule} from "@angular/forms";
 import {LoaderComponent} from "./main-page/map-page/calculator/loader/loader.component";
 import { ResultsComponent } from './main-page/map-page/calculator/results/results.component';
+import { PlaceQueryComponent } from './main-page/map-page/place-query/place-query.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ResultsComponent } from './main-page/map-page/calculator/results/result
     MapPageComponent,
     CalculatorComponent,
     LoaderComponent,
-    ResultsComponent
+    ResultsComponent,
+    PlaceQueryComponent
   ],
   imports: [
     BrowserModule,
