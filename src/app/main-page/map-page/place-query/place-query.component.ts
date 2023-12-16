@@ -13,8 +13,12 @@ export class PlaceQueryComponent {
 
   constructor(private nominatimService: NominatimService) {
     this.form = new FormGroup({
-      placeType: new FormControl(null, [Validators.required]),
-      placeName: new FormControl(null, [Validators.required]),
+      queryType: new FormControl(null, [Validators.required]),
+      placeName: new FormControl(null, []),
+      countryName: new FormControl(null, []),
+      stateName: new FormControl(null, []),
+      countyName: new FormControl(null, []),
+      cityName: new FormControl(null, []),
     })
   }
 
