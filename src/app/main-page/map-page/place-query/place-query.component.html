@@ -1,26 +1,26 @@
 <div class="place-query-container backdrop-blur">
   <form class="place-query-form" [formGroup]="form" (ngSubmit)="onSubmit()" ngNativeValidate>
     <div class="form-element">
-      <select [required]="true" formControlName="queryType">
+      <select [required]="true" class="place-query-control" formControlName="queryType">
         <option value="" [disabled]="true" [selected]="true" [hidden]="true">Select query type</option>
         <option value="q">Free search</option>
         <option value="structured">Structured</option>
       </select>
     </div>
     <div class="form-element">
-      <input #placeName type="text" formControlName="placeName" placeholder="Place name" autocomplete="off" [required]="true"/>
+      <input #placeName type="text" class="place-query-control" formControlName="placeName" placeholder="Place name" autocomplete="off" [required]="true"/>
     </div>
     <div class="form-element">
-      <input #countryName type="text" formControlName="countryName" placeholder="Country name or coordinates" autocomplete="off" [required]="false"/>
+      <input #countryName type="text" class="place-query-control" formControlName="countryName" placeholder="Country name or coordinates" autocomplete="off" [required]="false"/>
     </div>
     <div class="form-element">
-      <input #stateName type="text" formControlName="stateName" placeholder="State name or coordinates" autocomplete="off" [required]="false"/>
+      <input #stateName type="text" class="place-query-control" formControlName="stateName" placeholder="State name or coordinates" autocomplete="off" [required]="false"/>
     </div>
     <div class="form-element">
-      <input #countyName type="text" formControlName="countyName" placeholder="County name or coordinates" autocomplete="off" [required]="false"/>
+      <input #countyName type="text" class="place-query-control" formControlName="countyName" placeholder="County name or coordinates" autocomplete="off" [required]="false"/>
     </div>
     <div class="form-element">
-      <input #cityName type="text" formControlName="cityName" placeholder="City name or coordinates" autocomplete="off" [required]="false"/>
+      <input #cityName type="text" class="place-query-control" formControlName="cityName" placeholder="City name or coordinates" autocomplete="off" [required]="false"/>
     </div>
     <div class="form-element">
       <input type="submit" name="calculate" class="place-query-button" value="Calculate"/>
