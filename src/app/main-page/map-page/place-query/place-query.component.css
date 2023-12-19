@@ -4,7 +4,7 @@
 }
 
 .place-query-form {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   gap: 10px;
   padding-top: 1em;
@@ -16,14 +16,19 @@
 }
 
 .place-query-control {
+  display: inline-flex;
   background: transparent;
   width: 100%;
   height: 35px;
-  display: block;
   border: 1px solid #999;;
   border-radius: 10px;
   padding: 6px 30px;
   box-sizing: border-box;
+}
+
+.form-element {
+  min-width: 10rem;
+  width: 15rem;
 }
 
 select:invalid {
