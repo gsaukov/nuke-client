@@ -1,9 +1,11 @@
 .place-query-container {
   position: absolute;
+  width: 75%;
   left: 4em;
 }
 
 .place-query-form {
+  width:97%;
   display: inline-flex;
   flex-direction: row;
   gap: 10px;
@@ -11,12 +13,15 @@
   margin-left: 1em;
   margin-right: 1em;
   margin-bottom: 1em;
-  overflow: hidden;
   align-items: center;
 }
 
+.form-element {
+  width:100%;
+  min-width: 12rem;
+}
+
 .place-query-control {
-  display: inline-flex;
   background: transparent;
   width: 100%;
   height: 35px;
@@ -26,10 +31,6 @@
   box-sizing: border-box;
 }
 
-.form-element {
-  min-width: 10rem;
-  width: 15rem;
-}
 
 select:invalid {
   color: #999 !important;
