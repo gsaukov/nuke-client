@@ -1,6 +1,6 @@
 <div class="place-query-container backdrop-blur">
   <form class="place-query-form" [formGroup]="form" (ngSubmit)="onSubmit()" ngNativeValidate>
-    <div class="form-element" style="min-width: 10rem; width: 10rem;">
+    <div class="place-query-type-select" >
       <select #queryType [required]="true" class="place-query-control" formControlName="queryType">
 <!--        <option value="" [disabled]="true" [selected]="true" [hidden]="true">Select query type</option>-->
         <option value="q" [selected]="true">Free search</option>

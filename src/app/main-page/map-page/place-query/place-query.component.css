@@ -33,8 +33,9 @@
   box-sizing: border-box;
 }
 
-select:invalid {
-  color: #999 !important;
+.place-query-type-select {
+  min-width: 10rem;
+  width: 10rem;
 }
 
 .place-query-button{
@@ -46,3 +47,24 @@ select:invalid {
   cursor: pointer;
   margin-right: 2.5rem;
 }
+
+@media screen and (max-width: 900px) {
+  .place-query-container {
+    min-width: 25rem;
+  }
+
+  .place-query-form {
+    flex-direction: column;
+    min-width: 23rem;
+    width: 90%;
+  }
+
+  .place-query-type-select {
+    width: 100%;
+  }
+
+  .place-query-button {
+    margin-right: 0rem;
+  }
+}
+
