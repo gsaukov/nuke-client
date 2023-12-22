@@ -1,5 +1,6 @@
 import {CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
+import {MatTableModule} from '@angular/material/table'
 
 import {AppComponent} from './app.component';
 import {MainPageComponent} from './main-page/main-page.component';
@@ -26,7 +27,8 @@ import { PlaceQueryResultsComponent } from './main-page/map-page/place-query/pla
   imports: [
     BrowserModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent],
