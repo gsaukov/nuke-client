@@ -10,6 +10,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {LoaderComponent} from "./main-page/map-page/calculator/loader/loader.component";
 import { ResultsComponent } from './main-page/map-page/calculator/results/results.component';
 import { PlaceQueryComponent } from './main-page/map-page/place-query/place-query.component';
+import { PlaceQueryResultsComponent } from './main-page/map-page/place-query/place-query-results/place-query-results.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { PlaceQueryComponent } from './main-page/map-page/place-query/place-quer
     CalculatorComponent,
     LoaderComponent,
     ResultsComponent,
-    PlaceQueryComponent
+    PlaceQueryComponent,
+    PlaceQueryResultsComponent
   ],
   imports: [
     BrowserModule,
