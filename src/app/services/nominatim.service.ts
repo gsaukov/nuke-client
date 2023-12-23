@@ -5,11 +5,11 @@ import {Observable} from "rxjs";
 const API_URL = 'https://nominatim.openstreetmap.org'
 
 export interface NominatimQuery {
+  q: string;
   city: string;
   county: string;
   state: string;
   country: string;
-  q: string;
 }
 
 @Injectable({
