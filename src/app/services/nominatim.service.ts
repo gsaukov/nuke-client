@@ -5,11 +5,11 @@ import {Observable} from "rxjs";
 const API_URL = 'https://nominatim.openstreetmap.org'
 
 export interface NominatimQuery {
-  q: string;
-  city: string;
-  county: string;
-  state: string;
-  country: string;
+  q?: string;
+  city?: string;
+  county?: string;
+  state?: string;
+  country?: string;
 }
 
 @Injectable({
@@ -25,8 +25,12 @@ export class NominatimService {
   }
 
   searchPlaceQuery(queryObject: NominatimQuery): Observable<any> {
-    let query = new HttpParams({fromObject: queryObject as any}).toString()
+    let query = new HttpParams({fromObject: this.deleteNullParameters(queryObject) as any}).toString()
     return this.http.get<any>(`${API_URL}/search?X-Requested-With=overpass-turbo&format=json&${query}`)
+  }
+
+  private deleteNullParameters (queryObject: any) {
+    return Object.keys(queryObject).forEach(key => queryObject[key] === null ? delete queryObject[key] : '');
   }
 
 }
