@@ -30,7 +30,7 @@ export class NominatimService {
   }
 
   private deleteNullParameters (queryObject: any) {
-    return Object.keys(queryObject).forEach(key => queryObject[key] === null ? delete queryObject[key] : '');
+    return Object.fromEntries(Object.entries(queryObject).filter(([_, v]) => v != null));
   }
 
 }
