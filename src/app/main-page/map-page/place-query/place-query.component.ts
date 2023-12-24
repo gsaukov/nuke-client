@@ -35,6 +35,6 @@ export class PlaceQueryComponent {
 
     of(queryObject).pipe(
       mergeMap((queryObject) => this.nominatimService.searchPlaceQuery(queryObject)),
-    )
+    ).subscribe();
   }
 }
