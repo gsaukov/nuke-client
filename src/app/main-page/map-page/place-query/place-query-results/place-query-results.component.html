@@ -1,28 +1,34 @@
-<table mat-table
-       [dataSource]="dataSource" multiTemplateDataRows
-       class="mat-elevation-z8" style="position: relative">
-  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-  <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+<div *ngIf="dataSource.length > 0; else noPlaceFound">
+  <table mat-table
+         [dataSource]="dataSource" multiTemplateDataRows
+         class="mat-elevation-z8" style="position: relative">
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
 
-  <ng-container matColumnDef="#">
-    <th mat-header-cell *matHeaderCellDef>#</th>
-    <td mat-cell *matCellDef="let i = dataIndex">{{i + 1}}</td>
-  </ng-container>
+    <ng-container matColumnDef="#">
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef="let i = dataIndex">{{i + 1}}</td>
+    </ng-container>
 
-  <ng-container matColumnDef="display_name">
-    <th mat-header-cell *matHeaderCellDef>Name</th>
-    <td mat-cell *matCellDef="let element">{{element.display_name}}</td>
-  </ng-container>
+    <ng-container matColumnDef="display_name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">{{element.display_name}}</td>
+    </ng-container>
 
-  <ng-container matColumnDef="addresstype">
-    <th mat-header-cell *matHeaderCellDef>Type</th>
-    <td mat-cell *matCellDef="let element">{{element.addresstype}}</td>
-  </ng-container>
+    <ng-container matColumnDef="addresstype">
+      <th mat-header-cell *matHeaderCellDef>Type</th>
+      <td mat-cell *matCellDef="let element">{{element.addresstype}}</td>
+    </ng-container>
 
-  <ng-container matColumnDef="osm_id">
-    <th mat-header-cell *matHeaderCellDef>OSM ID</th>
-    <td mat-cell *matCellDef="let element">{{element.osm_id}}</td>
-  </ng-container>
-
-</table>
+    <ng-container matColumnDef="osm_id">
+      <th mat-header-cell *matHeaderCellDef>OSM ID</th>
+      <td mat-cell *matCellDef="let element">{{element.osm_id}}</td>
+    </ng-container>
+  </table>
+</div>
+<ng-template #noPlaceFound>
+  <div class="no-place-found">
+    <span>No place found</span>
+  </div>
+</ng-template>
 
