@@ -6,17 +6,22 @@
 
   <ng-container matColumnDef="#">
     <th mat-header-cell *matHeaderCellDef>#</th>
-    <td mat-cell *matCellDef="let element">{{element.number}}</td>
+    <td mat-cell *matCellDef="let i = dataIndex">{{i + 1}}</td>
   </ng-container>
 
-  <ng-container matColumnDef="placeName">
+  <ng-container matColumnDef="display_name">
     <th mat-header-cell *matHeaderCellDef>Name</th>
-    <td mat-cell *matCellDef="let element">{{element.placeName}}</td>
+    <td mat-cell *matCellDef="let element">{{element.display_name}}</td>
   </ng-container>
 
-  <ng-container matColumnDef="placeId">
-    <th mat-header-cell *matHeaderCellDef>ID</th>
-    <td mat-cell *matCellDef="let element">{{element.placeId}}</td>
+  <ng-container matColumnDef="addresstype">
+    <th mat-header-cell *matHeaderCellDef>Type</th>
+    <td mat-cell *matCellDef="let element">{{element.addresstype}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="osm_id">
+    <th mat-header-cell *matHeaderCellDef>OSM ID</th>
+    <td mat-cell *matCellDef="let element">{{element.osm_id}}</td>
   </ng-container>
 
 </table>
