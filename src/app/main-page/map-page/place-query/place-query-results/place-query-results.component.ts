@@ -6,7 +6,7 @@ import {Component, Input} from '@angular/core';
   styleUrls: ['./place-query-results.component.css']
 })
 export class PlaceQueryResultsComponent {
-  dataSource: any[]
+  @Input()dataSource: any[]
   columnsToDisplay = ['#', 'placeName', 'placeId']
 
   constructor() {

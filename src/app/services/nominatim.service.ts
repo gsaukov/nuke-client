@@ -12,6 +12,23 @@ export interface NominatimQuery {
   country?: string;
 }
 
+export interface NominatimResult {
+  addresstype: string;
+  boundingbox: number []
+  class: string;
+  display_name: string;
+  importance: number;
+  lat: number;
+  lon: number;
+  licence: string;
+  name: string;
+  osm_id: number;
+  osm_type: string;
+  place_id: number;
+  place_rank: number;
+  type: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -24,7 +41,7 @@ export class NominatimService {
     return this.http.get<any>(`${API_URL}/search?X-Requested-With=overpass-turbo&format=json&${placeType}=${placeName}`)
   }
 
-  searchPlaceQuery(queryObject: NominatimQuery): Observable<any> {
+  searchPlaceQuery(queryObject: NominatimQuery): Observable<NominatimResult[]> {
     let query = new HttpParams({fromObject: this.deleteNullParameters(queryObject) as any}).toString()
     return this.http.get<any>(`${API_URL}/search?X-Requested-With=overpass-turbo&format=json&${query}`)
   }

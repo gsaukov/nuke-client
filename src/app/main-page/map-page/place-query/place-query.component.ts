@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {NominatimQuery, NominatimService} from "../../../services/nominatim.service";
-import {of} from "rxjs";
+import {NominatimQuery, NominatimResult, NominatimService} from "../../../services/nominatim.service";
+import {Observable, of} from "rxjs";
 import {mergeMap} from "rxjs/operators";
 
 @Component({
@@ -12,10 +12,12 @@ import {mergeMap} from "rxjs/operators";
 export class PlaceQueryComponent {
 
   form: FormGroup
+  nominatimResult: NominatimResult[];
 
   constructor(private nominatimService: NominatimService) {
+    this.nominatimResult = [];
     this.form = new FormGroup({
-      queryType: new FormControl(null, [Validators.required]),
+      queryType: new FormControl('q', [Validators.required]),
       placeQuery: new FormControl(null, []),
       countryName: new FormControl(null, []),
       stateName: new FormControl(null, []),
@@ -27,16 +29,17 @@ export class PlaceQueryComponent {
   onSubmit() {
     of(this.createQueryObject()).pipe(
       mergeMap((queryObject) => this.nominatimService.searchPlaceQuery(queryObject)),
+      mergeMap((nominatimResult) => {this.nominatimResult = nominatimResult; return of()})
     ).subscribe();
   }
 
-  createQueryObject(): NominatimQuery{
+  createQueryObject(): NominatimQuery {
     if (this.form.controls['queryType'].value === 'q') {
-      return  {
+      return {
         q: this.form.controls['placeQuery'].value,
       }
     } else {
-      return  {
+      return {
         country: this.form.controls['countryName'].value,
         state: this.form.controls['stateName'].value,
         county: this.form.controls['countyName'].value,
