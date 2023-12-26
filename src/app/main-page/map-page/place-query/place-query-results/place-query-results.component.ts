@@ -7,13 +7,16 @@ import {NominatimResult} from "../../../../services/nominatim.service";
   styleUrls: ['./place-query-results.component.css']
 })
 export class PlaceQueryResultsComponent {
-  @Input()dataSource!: NominatimResult[]
+  private _dataSource!: NominatimResult[]
   columnsToDisplay = ['#', 'display_name', 'addresstype', 'osm_id', ]
 
-  constructor() {
+  @Input()
+  set dataSource(dataSource: NominatimResult[]) {
+    this._dataSource = dataSource;
   }
 
-  ngOnInit() {
+  get dataSource(): any {
+    return this._dataSource;
   }
 
 }

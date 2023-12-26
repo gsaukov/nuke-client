@@ -29,6 +29,8 @@
       </div>
     </ng-template>
   </form>
-  <app-place-query-results [dataSource]="nominatimResult" ></app-place-query-results>
+  <div *ngIf="searchInitialized">
+    <app-place-query-results [dataSource]="nominatimResult" ></app-place-query-results>
+  </div>
 </div>
 

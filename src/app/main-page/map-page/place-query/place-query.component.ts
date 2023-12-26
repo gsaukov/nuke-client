@@ -12,9 +12,11 @@ import {mergeMap} from "rxjs/operators";
 export class PlaceQueryComponent {
 
   form: FormGroup
-  nominatimResult: NominatimResult[];
+  searchInitialized: boolean
+  nominatimResult: NominatimResult[]
 
   constructor(private nominatimService: NominatimService) {
+    this.searchInitialized = false;
     this.nominatimResult = [];
     this.form = new FormGroup({
       queryType: new FormControl('q', [Validators.required]),
@@ -29,7 +31,11 @@ export class PlaceQueryComponent {
   onSubmit() {
     of(this.createQueryObject()).pipe(
       mergeMap((queryObject) => this.nominatimService.searchPlaceQuery(queryObject)),
-      mergeMap((nominatimResult) => {this.nominatimResult = nominatimResult; return of()})
+      mergeMap((nominatimResult) => {
+        this.nominatimResult = nominatimResult;
+        this.searchInitialized = true;
+        return of()
+      })
     ).subscribe();
   }
 
