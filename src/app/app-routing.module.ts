@@ -10,13 +10,13 @@ const routes: Routes = [
     path: '', component: MainPageComponent, children: [
       {
         path: '', component: MapPageComponent, children: [
-          {path: '', redirectTo: '/simpleSearch', pathMatch: 'full'},
-          {path: 'simpleSearch', component: CalculatorComponent,},
+          {path: '', component: CalculatorComponent,},
           {path: 'advancedSearch', component: PlaceQueryComponent},
         ]
       }
     ]
-  }
+  },
+  {path: '**', redirectTo: '', pathMatch: 'full'}, //page not found redirect to main
 ];
 
 @NgModule({
