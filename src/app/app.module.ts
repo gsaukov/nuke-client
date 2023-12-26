@@ -12,6 +12,8 @@ import {LoaderComponent} from "./main-page/map-page/calculator/loader/loader.com
 import { ResultsComponent } from './main-page/map-page/calculator/results/results.component';
 import { PlaceQueryComponent } from './main-page/map-page/place-query/place-query.component';
 import { PlaceQueryResultsComponent } from './main-page/map-page/place-query/place-query-results/place-query-results.component';
+import {RouterOutlet} from "@angular/router";
+import {AppRoutingModule} from "./app-routing.module";
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { PlaceQueryResultsComponent } from './main-page/map-page/place-query/pla
     BrowserModule,
     HttpClientModule,
     ReactiveFormsModule,
-    MatTableModule
+    MatTableModule,
+    RouterOutlet,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent],
