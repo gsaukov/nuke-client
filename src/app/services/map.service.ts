@@ -23,6 +23,7 @@ import {IWorkerCallbacks} from "../main-page/map-page/calculator/calculator.comp
 })
 export class MapService {
 
+  private map!: Map;
   private worker!: Worker;
 
   constructor(private turfService: TurfService) {
@@ -48,12 +49,12 @@ export class MapService {
         ],
         target: 'ol-map',
       });
-      observer.next(map);
+      observer.next(this.map = map);
       observer.complete();
     });
   }
 
-  addGeometryLayer(map: Map, geoJsonObject: any): Observable<void> {
+  addGeometryLayer(geoJsonObject: any): Observable<void> {
     return new Observable((observer) => {
       const geojsonFormat = new GeoJSON();
       const vectorSource = new VectorSource();
@@ -70,16 +71,16 @@ export class MapService {
           })
         ]
       });
-      map.addLayer(layer);
+      this.map.addLayer(layer);
       observer.next();
       observer.complete();
     });
   }
 
-  addCircles(map: Map, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number, workerCallBacks: any): Observable<void> {
+  addCircles(polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number, workerCallBacks: any): Observable<void> {
     const vectorSource = new VectorSource();
     const layer = new Vector({source: vectorSource,});
-    map.addLayer(layer);
+    this.map.addLayer(layer);
     return of(this.addCirclesToVector(vectorSource, polygon, num, radius, workerCallBacks))
   }
 
@@ -115,10 +116,10 @@ export class MapService {
   }
 
 
-  setViewOnGeoJson(map: Map, geoJsonObject: any): Observable<void> {
+  setViewOnGeoJson(geoJsonObject: any): Observable<void> {
     return new Observable((observer) => {
       const bbox = this.turfService.bbox(geoJsonObject)
-      map.getView().fit(transformExtent(bbox, 'EPSG:4326', map.getView().getProjection()), {size: map.getSize()});
+      this.map.getView().fit(transformExtent(bbox, 'EPSG:4326', this.map.getView().getProjection()), {size: this.map.getSize()});
       observer.next();
       observer.complete();
     });
@@ -162,6 +163,10 @@ export class MapService {
     if(this.worker){
       this.worker.terminate()
     }
+  }
+
+  getMap(): Map {
+    return this.map;
   }
 
 }
