@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 import Map from 'ol/Map';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {NominatimService} from "../../../services/nominatim.service";
@@ -33,7 +33,7 @@ export class CalculatorComponent {
 
   private COUNTRY_ID_PREFIX = "36";
 
-  @Input() map!: Map;
+  map: Map;
   form: FormGroup
   errorMessage: string|any = null
   loading: boolean = false
@@ -41,6 +41,7 @@ export class CalculatorComponent {
   calculationResults!: ICalculationResults|null;
 
   constructor(private mapService: MapService, private nominatimService: NominatimService, private overpassService: OverpassService) {
+    this.map = mapService.getMap()
     this.form = new FormGroup({
       placeType: new FormControl(null, [Validators.required]),
       placeName: new FormControl(null, [Validators.required]),
@@ -90,9 +91,9 @@ export class CalculatorComponent {
       mergeMap(geoJsonObject => {
         this.working = true;
         return zip(
-          this.mapService.addGeometryLayer(this.map, geoJsonObject),
-          this.mapService.addCircles(this.map, geoJsonObject.features[0] as TurfFeature<(Polygon | MultiPolygon)>, num, radius, this.workerCallBacks),
-          this.mapService.setViewOnGeoJson(this.map, geoJsonObject)
+          this.mapService.addGeometryLayer(geoJsonObject),
+          this.mapService.addCircles(geoJsonObject.features[0] as TurfFeature<(Polygon | MultiPolygon)>, num, radius, this.workerCallBacks),
+          this.mapService.setViewOnGeoJson(geoJsonObject)
         );
       })
     );
