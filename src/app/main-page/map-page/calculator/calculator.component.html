@@ -4,7 +4,7 @@
       <form [formGroup]="form" (ngSubmit)="onSubmit()" ngNativeValidate>
         <div class="form-group">
           <select [required]="true" class="calculator-control" formControlName="placeType">
-            <option value="" [disabled]="true" [selected]="true" [hidden]="true">Select place type</option>
+            <option value="" [disabled]="true" [selected]="defaultPlaceTypeSelect" [hidden]="true">Select place type</option>
             <option value="city">City</option>
             <option value="county">County</option>
             <option value="state">State</option>

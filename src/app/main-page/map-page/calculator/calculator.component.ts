@@ -1,14 +1,13 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import Map from 'ol/Map';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {NominatimService} from "../../../services/nominatim.service";
 import {OverpassService} from "../../../services/overpass.service";
 import {MapService} from "../../../services/map.service";
 import {Feature as TurfFeature, MultiPolygon, Point, Polygon} from "@turf/turf";
-import {finalize, Observable, zip} from "rxjs";
-import {catchError, mergeMap} from 'rxjs/operators';
-import { of } from 'rxjs';
+import {mergeMap, catchError, finalize, Observable, of, zip} from "rxjs";
 import * as osm2geojson from 'osm2geojson-lite';
+import {ActivatedRoute, Params, Router} from "@angular/router";
 
 export interface IWorkerCallbacks {
   onComplete: () => void;
@@ -24,30 +23,58 @@ export interface ICalculationResults {
   eventsNumberProgress: number;
 }
 
+export interface ICalculationQueryParameters {
+  placeType: string;
+  placeName: string;
+  radius: number;
+  number: number;
+}
+
 @Component({
   selector: 'app-calculator',
   templateUrl: './calculator.component.html',
   styleUrls: ['./calculator.component.css']
 })
-export class CalculatorComponent {
+export class CalculatorComponent  implements OnInit {
 
   private COUNTRY_ID_PREFIX = "36";
 
-  map: Map;
-  form: FormGroup
+  map!: Map;
+  form!: FormGroup
+  defaultPlaceTypeSelect: boolean = true;
   errorMessage: string|any = null
   loading: boolean = false
   working: boolean = false
   calculationResults!: ICalculationResults|null;
 
-  constructor(private mapService: MapService, private nominatimService: NominatimService, private overpassService: OverpassService) {
-    this.map = mapService.getMap()
-    this.form = new FormGroup({
-      placeType: new FormControl(null, [Validators.required]),
-      placeName: new FormControl(null, [Validators.required]),
-      radius: new FormControl(null, [Validators.required]),
-      number: new FormControl(null, [Validators.required]),
+  constructor(private mapService: MapService,
+              private nominatimService: NominatimService,
+              private overpassService: OverpassService,
+              private router: Router,
+              private route: ActivatedRoute) {
+  }
+
+  ngOnInit(): void {
+    this.map = this.mapService.getMap()
+    this.route.queryParams.subscribe((params: Params) => {
+      this.defaultPlaceTypeSelect = !params['placeType']
+      this.form = new FormGroup({
+        placeType: new FormControl(params['placeType'], [Validators.required]),
+        placeName: new FormControl(params['placeName'], [Validators.required]),
+        radius: new FormControl(params['radius'], [Validators.required]),
+        number: new FormControl(params['number'], [Validators.required]),
+      })
     })
+  }
+
+  addQueryParametersToUrl(placeType: string, placeName: string, radius: number, number: number) {
+    let queryParams: ICalculationQueryParameters = {
+      placeType: placeType,
+      placeName: placeName,
+      radius: radius,
+      number: number
+    }
+    this.router.navigate([], {queryParams: queryParams})
   }
 
   onSubmit() {
@@ -59,7 +86,7 @@ export class CalculatorComponent {
     const radius = this.form.controls['radius'].value
     const num = this.form.controls['number'].value
     this.calculationResults = this.newCalculationResults(placeName, radius, num)
-
+    this.addQueryParametersToUrl(placeType, placeName, radius, num);
     of(placeName).pipe(
       mergeMap((placeName)=> this.nominatimService.searchPlace(placeType, placeName)),
       mergeMap(nominatimRes => this.getOverpassData(nominatimRes)),
