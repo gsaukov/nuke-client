@@ -18,16 +18,20 @@ export class PlaceQueryComponent {
 
   form!: FormGroup
   searchInitialized: boolean
+  defaultQueryTypeSelect: boolean
   nominatimResult: NominatimResult[]
 
   constructor(private nominatimService: NominatimService, private router: Router, private route: ActivatedRoute) {
     this.searchInitialized = false;
+    this.defaultQueryTypeSelect = true
     this.nominatimResult = [];
   }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params: Params) => {
-      let queryTypeParam = params['queryType'] ? params['queryType'] : 'q'
+      const queryType = params['queryType']
+      this.defaultQueryTypeSelect = !queryType
+      const queryTypeParam = queryType ? queryType : 'freeQuery'
       this.form = new FormGroup({
         queryType: new FormControl(queryTypeParam, [Validators.required]),
         placeQuery: new FormControl(params['q'], []),
@@ -53,7 +57,7 @@ export class PlaceQueryComponent {
   }
 
   createQueryObject(): NominatimQuery {
-    if (this.getQueryType()=== 'q') {
+    if (this.getQueryType()=== 'freeQuery') {
       return {
         q: this.form.controls['placeQuery'].value,
       }

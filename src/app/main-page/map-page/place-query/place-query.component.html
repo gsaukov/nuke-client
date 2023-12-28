@@ -2,11 +2,11 @@
   <form class="place-query-form" [formGroup]="form" (ngSubmit)="onSubmit()" ngNativeValidate>
     <div class="place-query-type-select" >
       <select #queryType [required]="true" class="place-query-control" formControlName="queryType">
-        <option value="q" [selected]="true">Free search</option>
-        <option value="structured">Structured</option>
+        <option value="freeQuery" [selected]="defaultQueryTypeSelect">Free search</option>
+        <option value="structuredQuery">Structured</option>
       </select>
     </div>
-    <div *ngIf="queryType.value === 'structured'; then structuredSearch; else freeSearch"> </div>
+    <div *ngIf="queryType.value === 'structuredQuery'; then structuredSearch; else freeSearch"> </div>
     <input type="submit" name="find" class="place-query-button" value="Find"/>
     <ng-template #freeSearch>
       <div class="form-element" >
