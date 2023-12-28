@@ -1,8 +1,13 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {NominatimQuery, NominatimResult, NominatimService} from "../../../services/nominatim.service";
-import {Observable, of} from "rxjs";
+import {of} from "rxjs";
 import {mergeMap} from "rxjs/operators";
+import {ActivatedRoute, Params, Router} from "@angular/router";
+
+export interface IPlaceQueryQueryParameters extends NominatimQuery {
+  queryType?: string;
+}
 
 @Component({
   selector: 'app-place-query',
@@ -11,36 +16,44 @@ import {mergeMap} from "rxjs/operators";
 })
 export class PlaceQueryComponent {
 
-  form: FormGroup
+  form!: FormGroup
   searchInitialized: boolean
   nominatimResult: NominatimResult[]
 
-  constructor(private nominatimService: NominatimService) {
+  constructor(private nominatimService: NominatimService, private router: Router, private route: ActivatedRoute) {
     this.searchInitialized = false;
     this.nominatimResult = [];
-    this.form = new FormGroup({
-      queryType: new FormControl('q', [Validators.required]),
-      placeQuery: new FormControl(null, []),
-      countryName: new FormControl(null, []),
-      stateName: new FormControl(null, []),
-      countyName: new FormControl(null, []),
-      cityName: new FormControl(null, []),
+  }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params: Params) => {
+      let queryTypeParam = params['queryType'] ? params['queryType'] : 'q'
+      this.form = new FormGroup({
+        queryType: new FormControl(queryTypeParam, [Validators.required]),
+        placeQuery: new FormControl(params['q'], []),
+        countryName: new FormControl(params['country'], []),
+        stateName: new FormControl(params['state'], []),
+        countyName: new FormControl(params['county'], []),
+        cityName: new FormControl(params['city'], []),
+      })
     })
   }
 
   onSubmit() {
-    of(this.createQueryObject()).pipe(
-      mergeMap((queryObject) => this.nominatimService.searchPlaceQuery(queryObject)),
+    let queryObject = this.createQueryObject()
+    of(queryObject).pipe(
+      mergeMap(() => this.nominatimService.searchPlaceQuery(queryObject)),
       mergeMap((nominatimResult) => {
         this.nominatimResult = nominatimResult;
         this.searchInitialized = true;
+        this.addQueryParametersToUrl(queryObject)
         return of()
       })
     ).subscribe();
   }
 
   createQueryObject(): NominatimQuery {
-    if (this.form.controls['queryType'].value === 'q') {
+    if (this.getQueryType()=== 'q') {
       return {
         q: this.form.controls['placeQuery'].value,
       }
@@ -52,5 +65,15 @@ export class PlaceQueryComponent {
         city: this.form.controls['cityName'].value,
       }
     }
+
+  }
+
+  getQueryType(): string {
+    return this.form.controls['queryType'].value
+  }
+
+  addQueryParametersToUrl(nominatimQuery: NominatimQuery) {
+    let queryParams: IPlaceQueryQueryParameters = {...nominatimQuery, ...{queryType: this.getQueryType()}}
+    this.router.navigate([], {queryParams: queryParams})
   }
 }
