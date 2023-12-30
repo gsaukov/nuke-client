@@ -19,4 +19,7 @@ export class PlaceQueryResultsComponent {
     return this._dataSource;
   }
 
+  selectPlace(row:NominatimResult) {
+    console.log(row)
+  }
 }
