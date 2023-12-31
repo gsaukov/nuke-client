@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {NominatimResult} from "../../../../services/nominatim.service";
 import {OverpassService} from "../../../../services/overpass.service";
-import {mergeMap, of} from "rxjs";
+import {mergeMap, of, zip} from "rxjs";
 import * as osm2geojson from "osm2geojson-lite";
 import {MapService} from "../../../../services/map.service";
 
@@ -29,7 +29,12 @@ export class PlaceQueryResultsComponent {
     const countryId = OverpassService.getOverpassCountryId(row.osm_id)
     this.overpassService.getGeometryData(countryId).pipe(
       mergeMap(overpassRes => of(osm2geojson(overpassRes, {completeFeature: true}))),
-      mergeMap(geoJsonObject => this.mapService.addGeometryLayer(geoJsonObject))
+      mergeMap(geoJsonObject => {
+        return zip(
+          this.mapService.addGeometryLayer(geoJsonObject),
+          this.mapService.setViewOnGeoJson(geoJsonObject)
+        );
+      })
     ).subscribe()
   }
 }
