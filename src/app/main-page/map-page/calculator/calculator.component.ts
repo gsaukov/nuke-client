@@ -37,8 +37,6 @@ export interface ICalculationQueryParameters {
 })
 export class CalculatorComponent  implements OnInit {
 
-  private COUNTRY_ID_PREFIX = "36";
-
   map!: Map;
   form!: FormGroup
   defaultPlaceTypeSelect: boolean = true;
@@ -104,13 +102,8 @@ export class CalculatorComponent  implements OnInit {
   }
 
   private getOverpassData(data: any): Observable<any> {
-    const countryId = this.getOverpassCountryId(data[0].osm_id)
+    const countryId = OverpassService.getOverpassCountryId(data[0].osm_id)
     return this.overpassService.getGeometryData(countryId);
-  }
-
-  private getOverpassCountryId(osmId: number) {
-    const formatted = String(osmId).padStart(8, '0');
-    return this.COUNTRY_ID_PREFIX + formatted;
   }
 
   private printOnMap(overpassRes: any, num: number, radius: number): Observable<unknown[]> {

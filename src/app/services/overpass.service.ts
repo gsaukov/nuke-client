@@ -9,6 +9,8 @@ const API_URL = 'https://www.overpass-api.de'
 })
 export class OverpassService {
 
+  private static COUNTRY_ID_PREFIX = "36";
+
   constructor(private http: HttpClient) {
   }
 
@@ -16,6 +18,11 @@ export class OverpassService {
     const query = `[out:json];area(id:${val});rel(pivot);out body geom;`;
     const encodedQuery = encodeURIComponent(query);
     return this.http.get<any>(`${API_URL}/api/interpreter?data=${encodedQuery}`)
+  }
+
+  static getOverpassCountryId(osmId: number) {
+    const formatted = String(osmId).padStart(8, '0');
+    return this.COUNTRY_ID_PREFIX + formatted;
   }
 
 }
