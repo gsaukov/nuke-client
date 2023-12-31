@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {NominatimResult} from "../../../../services/nominatim.service";
+import {OverpassService} from "../../../../services/overpass.service";
 
 @Component({
   selector: 'app-place-query-results',
@@ -9,6 +10,8 @@ import {NominatimResult} from "../../../../services/nominatim.service";
 export class PlaceQueryResultsComponent {
   private _dataSource!: NominatimResult[]
   columnsToDisplay = ['#', 'display_name', 'addresstype', 'osm_id', ]
+
+  constructor(private overpassService: OverpassService) { }
 
   @Input()
   set dataSource(dataSource: NominatimResult[]) {
@@ -20,6 +23,7 @@ export class PlaceQueryResultsComponent {
   }
 
   selectPlace(row:NominatimResult) {
-    console.log(row)
+    const countryId = OverpassService.getOverpassCountryId(row.osm_id)
+    return this.overpassService.getGeometryData(countryId);
   }
 }
