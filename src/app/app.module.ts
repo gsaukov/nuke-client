@@ -14,6 +14,9 @@ import { PlaceQueryComponent } from './main-page/map-page/place-query/place-quer
 import { PlaceQueryResultsComponent } from './main-page/map-page/place-query/place-query-results/place-query-results.component';
 import {RouterOutlet} from "@angular/router";
 import {AppRoutingModule} from "./app-routing.module";
+import {
+    PlaceEventsComponent
+} from "./main-page/map-page/place-query/place-events/place-events.component";
 
 @NgModule({
   declarations: [
@@ -26,14 +29,15 @@ import {AppRoutingModule} from "./app-routing.module";
     PlaceQueryComponent,
     PlaceQueryResultsComponent
   ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    MatTableModule,
-    RouterOutlet,
-    AppRoutingModule
-  ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        MatTableModule,
+        RouterOutlet,
+        AppRoutingModule,
+        PlaceEventsComponent
+    ],
   providers: [],
   bootstrap: [AppComponent],
   schemas: [
