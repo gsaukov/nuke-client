@@ -8,6 +8,8 @@ import {Feature as TurfFeature, MultiPolygon, Point, Polygon} from "@turf/turf";
 import {mergeMap, catchError, finalize, Observable, of, zip} from "rxjs";
 import * as osm2geojson from 'osm2geojson-lite';
 import {ActivatedRoute, Params, Router} from "@angular/router";
+import {LayersService} from "../../../services/layers.service";
+import {EventsService} from "../../../services/events.service";
 
 export interface IWorkerCallbacks {
   onComplete: () => void;
@@ -46,6 +48,8 @@ export class CalculatorComponent  implements OnInit {
   calculationResults!: ICalculationResults|null;
 
   constructor(private mapService: MapService,
+              private layersService: LayersService,
+              private eventsService: EventsService,
               private nominatimService: NominatimService,
               private overpassService: OverpassService,
               private router: Router,
@@ -111,8 +115,7 @@ export class CalculatorComponent  implements OnInit {
       mergeMap(geoJsonObject => {
         this.working = true;
         return zip(
-          this.mapService.addGeometryLayer(geoJsonObject),
-          this.mapService.addCircles(geoJsonObject.features[0] as TurfFeature<(Polygon | MultiPolygon)>, num, radius, this.workerCallBacks),
+          this.layersService.addGeoJsonAndEventLayer(geoJsonObject, num, radius, this.workerCallBacks),
           this.mapService.setViewOnGeoJson(geoJsonObject)
         );
       })
@@ -145,7 +148,7 @@ export class CalculatorComponent  implements OnInit {
   }
 
   terminateWorker() {
-    this.mapService.terminateRandomPointsWorker()
+    this.eventsService.terminateRandomPointsWorker()
     this.complete()
   }
 

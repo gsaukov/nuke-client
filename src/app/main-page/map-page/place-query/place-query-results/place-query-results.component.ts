@@ -4,6 +4,7 @@ import {OverpassService} from "../../../../services/overpass.service";
 import {mergeMap, of, zip} from "rxjs";
 import * as osm2geojson from "osm2geojson-lite";
 import {MapService} from "../../../../services/map.service";
+import {LayersService} from "../../../../services/layers.service";
 
 @Component({
   selector: 'app-place-query-results',
@@ -14,7 +15,7 @@ export class PlaceQueryResultsComponent {
   private _dataSource!: NominatimResult[]
   columnsToDisplay = ['#', 'display_name', 'addresstype', 'osm_id', ]
 
-  constructor(private overpassService: OverpassService, private mapService: MapService) { }
+  constructor(private overpassService: OverpassService, private mapService: MapService, private layersService: LayersService) { }
 
   @Input()
   set dataSource(dataSource: NominatimResult[]) {
@@ -31,7 +32,7 @@ export class PlaceQueryResultsComponent {
       mergeMap(overpassRes => of(osm2geojson(overpassRes, {completeFeature: true}))),
       mergeMap(geoJsonObject => {
         return zip(
-          this.mapService.addGeometryLayer(geoJsonObject),
+          this.layersService.addGeoJsonLayer(geoJsonObject),
           this.mapService.setViewOnGeoJson(geoJsonObject)
         );
       })
