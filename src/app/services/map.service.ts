@@ -7,7 +7,7 @@ import OSM from "ol/source/OSM";
 import {Observable, of} from "rxjs";
 import {TurfService} from "./turf.service";
 import {ScaleLine, defaults} from "ol/control";
-import {IWorkerCallbacks} from "../main-page/map-page/calculator/calculator.component";
+import {FeatureCollection} from "@turf/helpers/dist/js/lib/geojson";
 
 
 @Injectable({
@@ -45,7 +45,7 @@ export class MapService {
     });
   }
 
-  setViewOnGeoJson(geoJsonObject: any): Observable<void> {
+  setViewOnGeoJson(geoJsonObject: FeatureCollection): Observable<void> {
     return new Observable((observer) => {
       const bbox = this.turfService.bbox(geoJsonObject)
       this.map.getView().fit(transformExtent(bbox, 'EPSG:4326', this.map.getView().getProjection()), {size: this.map.getSize()});
