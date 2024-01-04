@@ -3,7 +3,7 @@
          [dataSource]="dataSource" multiTemplateDataRows
          class="mat-elevation-z8" style="position: relative">
     <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-    <tr mat-row (click)="selectPlace(row)" *matRowDef="let row; columns: columnsToDisplay;"></tr>
+    <tr mat-row (click)="previewPlace(row)" *matRowDef="let row; columns: columnsToDisplay;"></tr>
 
     <ng-container matColumnDef="#">
       <th mat-header-cell *matHeaderCellDef>#</th>

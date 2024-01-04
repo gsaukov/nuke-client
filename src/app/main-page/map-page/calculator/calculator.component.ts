@@ -10,6 +10,7 @@ import * as osm2geojson from 'osm2geojson-lite';
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {LayersService} from "../../../services/layers.service";
 import {EventsService} from "../../../services/events.service";
+import {Osm2GeojsonService} from "../../../services/osm2seojson.service";
 
 export interface IWorkerCallbacks {
   onComplete: () => void;
@@ -52,6 +53,7 @@ export class CalculatorComponent  implements OnInit {
               private eventsService: EventsService,
               private nominatimService: NominatimService,
               private overpassService: OverpassService,
+              private osm2GeojsonService: Osm2GeojsonService,
               private router: Router,
               private route: ActivatedRoute) {
   }
@@ -111,7 +113,7 @@ export class CalculatorComponent  implements OnInit {
   }
 
   private printOnMap(overpassRes: any, num: number, radius: number): Observable<unknown[]> {
-    return of(osm2geojson(overpassRes, { completeFeature: true })).pipe(
+    return of(this.osm2GeojsonService.convert(overpassRes)).pipe(
       mergeMap(geoJsonObject => {
         this.working = true;
         return zip(
