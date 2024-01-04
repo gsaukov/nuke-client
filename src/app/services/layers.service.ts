@@ -8,7 +8,7 @@ import {v4 as uuidv4} from 'uuid';
 import {Observable, of, switchMap} from "rxjs";
 import {GeoJSON} from "ol/format";
 import {Fill, Stroke, Style} from "ol/style";
-import {Feature as TurfFeature} from "@turf/helpers/dist/js/lib/geojson";
+import {Feature as TurfFeature, FeatureCollection} from "@turf/helpers/dist/js/lib/geojson";
 import {MultiPolygon, Polygon} from "@turf/turf";
 import {EventsService} from "./events.service";
 
@@ -22,7 +22,7 @@ export interface ILayerID {
   providedIn: 'root'
 })
 export class LayersService {
-
+  public static LAYER_ID = 'LAYER_ID'
   private map!: OlMap;
   private layerData: Map<string, Map<string, Vector<VectorSource<Geometry>>>>;
 
@@ -41,7 +41,7 @@ export class LayersService {
     );
   }
 
-  addGeoJsonLayer(geoJsonObject: any): Observable<ILayerID> {
+  addGeoJsonLayer(geoJsonObject: FeatureCollection): Observable<ILayerID> {
     return new Observable((observer) => {
       const geojsonFormat = new GeoJSON();
       const vectorSource = new VectorSource();
@@ -59,12 +59,14 @@ export class LayersService {
           })
         ]
       });
-      this.map.addLayer(layer);
-      let layerId = {
+      const layerId = {
         geoJsonId: geojsonId as string,
         uuid: uuidv4()
       }
+      layer.set(LayersService.LAYER_ID, layerId)
       this.addToLayerData(layerId, layer)
+      this.map.addLayer(layer);
+
       observer.next(layerId);
       observer.complete();
     });
@@ -75,8 +77,12 @@ export class LayersService {
     return of(this.eventsService.addEventsToVector(vectorSource, polygon, num, radius, workerCallBacks))
   }
 
-  removeLayer(id:ILayerID){
-
+  removeLayer(layerId:ILayerID){
+    this.map.getLayers().forEach(layer => {
+      if (layer && layer.get(LayersService.LAYER_ID) === layerId) {
+        this.map.removeLayer(layer);
+      }
+    });
   }
 
   getLayerVector(layerId:ILayerID):Vector<VectorSource<Geometry>> {
