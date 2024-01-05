@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {NominatimResult} from "../../../../services/nominatim.service";
 import {OverpassService} from "../../../../services/overpass.service";
-import {mergeMap, of, zip} from "rxjs";
+import {mergeMap, Observable, of, zip} from "rxjs";
 import {MapService} from "../../../../services/map.service";
 import {ILayerID, LayersService} from "../../../../services/layers.service";
 import {Osm2GeojsonService} from "../../../../services/osm2seojson.service";
@@ -31,8 +31,7 @@ export class PlaceQueryResultsComponent {
     if(this.previewPlaceLayerId){
       this.removePreviewLayer()
     }
-    const countryId = OverpassService.getOverpassCountryId(row.osm_id)
-    this.overpassService.getGeometryData(countryId).pipe(
+    this.getOverpassData(row).pipe(
       mergeMap(overpassRes => of(this.osm2GeojsonService.convert(overpassRes))),
       mergeMap(geoJsonObject => {
         return zip(
@@ -45,6 +44,20 @@ export class PlaceQueryResultsComponent {
         this.previewPlaceLayerId = responses[0]
       }
     )
+  }
+
+  private getOverpassData(data: NominatimResult): Observable<any> {
+    const countryId = OverpassService.getOverpassCountryId(data.osm_id)
+    switch (data.osm_type) {
+      case 'node':
+        return this.overpassService.getNodeGeometryData(data.osm_id.toString());
+      case 'way':
+        return this.overpassService.getWayGeometryData(data.osm_id.toString());
+      case 'relation':
+        return this.overpassService.getRelationGeometryData(countryId);
+      default:
+        return this.overpassService.getRelationGeometryData(countryId);
+    }
   }
 
   // selectPlace(row:NominatimResult) {

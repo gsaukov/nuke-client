@@ -109,7 +109,7 @@ export class CalculatorComponent  implements OnInit {
 
   private getOverpassData(data: any): Observable<any> {
     const countryId = OverpassService.getOverpassCountryId(data[0].osm_id)
-    return this.overpassService.getGeometryData(countryId);
+    return this.overpassService.getRelationGeometryData(countryId);
   }
 
   private printOnMap(overpassRes: any, num: number, radius: number): Observable<unknown[]> {
