@@ -14,20 +14,21 @@ export class OverpassService {
   constructor(private http: HttpClient) {
   }
 
-  getRelationGeometryData(val: string): Observable<any> {
-    const query = `[out:json];area(id:${val});rel(pivot);out body geom;`;
+  getRelationGeometryData(osmId: number): Observable<any> {
+    const adjustedOsmId = OverpassService.getOverpassCountryId(osmId)
+    const query = `[out:json];area(id:${adjustedOsmId});rel(pivot);out body geom;`
     const encodedQuery = encodeURIComponent(query);
     return this.http.get<any>(`${API_URL}/api/interpreter?data=${encodedQuery}`)
   }
 
-  getWayGeometryData(val: string): Observable<any> {
-    const query = `[out:json];area(id:${val});way(pivot);out geom;`;
+  getWayGeometryData(osmId: number): Observable<any> {
+    const query = `[out:json];area(id:${osmId});way(pivot);out geom;`
     const encodedQuery = encodeURIComponent(query);
     return this.http.get<any>(`${API_URL}/api/interpreter?data=${encodedQuery}`)
   }
 
-  getNodeGeometryData(val: string): Observable<any> {
-    const query = `[out:json];node(id:${val});out geom;`;
+  getNodeGeometryData(osmId: number): Observable<any> {
+    const query = `[out:json];node(id:${osmId});out geom;`
     const encodedQuery = encodeURIComponent(query);
     return this.http.get<any>(`${API_URL}/api/interpreter?data=${encodedQuery}`)
   }

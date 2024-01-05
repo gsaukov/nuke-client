@@ -47,16 +47,15 @@ export class PlaceQueryResultsComponent {
   }
 
   private getOverpassData(data: NominatimResult): Observable<any> {
-    const countryId = OverpassService.getOverpassCountryId(data.osm_id)
     switch (data.osm_type) {
       case 'node':
-        return this.overpassService.getNodeGeometryData(data.osm_id.toString());
+        return this.overpassService.getNodeGeometryData(data.osm_id);
       case 'way':
-        return this.overpassService.getWayGeometryData(data.osm_id.toString());
+        return this.overpassService.getWayGeometryData(data.osm_id);
       case 'relation':
-        return this.overpassService.getRelationGeometryData(countryId);
+        return this.overpassService.getRelationGeometryData(data.osm_id);
       default:
-        return this.overpassService.getRelationGeometryData(countryId);
+        return this.overpassService.getRelationGeometryData(data.osm_id);
     }
   }
 
