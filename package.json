@@ -21,7 +21,7 @@
     "@angular/router": "^17.0.4",
     "@turf/turf": "^6.5.0",
     "ol": "^8.1.0",
-    "osm2geojson-lite": "^0.9.4",
+    "osmtogeojson": "^3.0.0-beta.5",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
