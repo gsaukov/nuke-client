@@ -9,3 +9,20 @@
   background-color: rgba(255, 255, 255, .50);
   cursor: pointer;
 }
+
+.place-select-button {
+  float: right;
+  height: 30px;
+  min-width: 5rem;
+  border: 1px;
+  border-radius: 5px;
+  background: rgba(128, 128, 128, 0.2);
+  cursor: pointer;
+}
+
+.place-select-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-style: solid;
+  border-color: rgba(128, 128, 128);
+  cursor: pointer;
+}

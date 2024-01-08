@@ -48,6 +48,13 @@
   margin-right: 2.5rem;
 }
 
+.place-query-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-style: solid;
+  border-color: rgba(128, 128, 128);
+  cursor: pointer;
+}
+
 @media screen and (max-width: 900px) {
   .place-query-container {
     min-width: 25rem;

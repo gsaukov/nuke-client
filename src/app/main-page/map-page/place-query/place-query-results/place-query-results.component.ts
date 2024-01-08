@@ -14,7 +14,7 @@ import {Osm2GeojsonService} from "../../../../services/osm2seojson.service";
 export class PlaceQueryResultsComponent {
   private _dataSource!: NominatimResult[]
   private previewPlaceLayerId!: ILayerID
-  columnsToDisplay = ['#', 'display_name', 'addresstype', 'osm_id', ]
+  columnsToDisplay = ['#', 'display_name', 'addresstype', 'osm_id', 'placeSelector']
 
   constructor(private overpassService: OverpassService, private mapService: MapService, private layersService: LayersService, private osm2GeojsonService: Osm2GeojsonService) { }
 
