@@ -26,3 +26,14 @@
   border-color: rgba(128, 128, 128);
   cursor: pointer;
 }
+
+@media screen and (max-width: 900px) {
+  .place-select-button {
+    margin-right: 0rem;
+    min-width: 3rem;
+  }
+  .mat-mdc-cell {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
