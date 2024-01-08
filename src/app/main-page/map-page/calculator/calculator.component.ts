@@ -6,7 +6,6 @@ import {OverpassService} from "../../../services/overpass.service";
 import {MapService} from "../../../services/map.service";
 import {Feature as TurfFeature, MultiPolygon, Point, Polygon} from "@turf/turf";
 import {mergeMap, catchError, finalize, Observable, of, zip} from "rxjs";
-import * as osm2geojson from 'osm2geojson-lite';
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {LayersService} from "../../../services/layers.service";
 import {EventsService} from "../../../services/events.service";
