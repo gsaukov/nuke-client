@@ -46,6 +46,10 @@ export class PlaceQueryResultsComponent {
     )
   }
 
+  selectPlace(element:NominatimResult) {
+
+  }
+
   private getOverpassData(data: NominatimResult): Observable<any> {
     switch (data.osm_type) {
       case 'node':
@@ -59,24 +63,8 @@ export class PlaceQueryResultsComponent {
     }
   }
 
-  // selectPlace(row:NominatimResult) {
-  //   const countryId = OverpassService.getOverpassCountryId(row.osm_id)
-  //   this.overpassService.getGeometryData(countryId).pipe(
-  //     mergeMap(overpassRes => of(osm2geojson(overpassRes, {completeFeature: true}))),
-  //     mergeMap(geoJsonObject => {
-  //       return zip(
-  //         this.layersService.addGeoJsonLayer(geoJsonObject),
-  //         this.mapService.setViewOnGeoJson(geoJsonObject)
-  //       );
-  //     })
-  //   ).subscribe(
-  //     responses => {
-  //       this.previewPlaceLayerId = responses[0]
-  //     }
-  //   )
-  // }
-
   private removePreviewLayer() {
     this.layersService.removeLayer(this.previewPlaceLayerId)
   }
+
 }
