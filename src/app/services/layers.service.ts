@@ -9,11 +9,16 @@ import {Observable, of, switchMap} from "rxjs";
 import {GeoJSON} from "ol/format";
 import {Fill, Stroke, Style} from "ol/style";
 import {Feature as TurfFeature, FeatureCollection} from "@turf/helpers/dist/js/lib/geojson";
-import {MultiPolygon, Polygon} from "@turf/turf";
+import {MultiPolygon, Polygon, Properties} from "@turf/turf";
 import {EventsService} from "./events.service";
 
 export interface ILayerID {
   geoJsonId: string;
+  uuid: string;
+}
+
+export interface ILayerData {
+  vector: Vector<VectorSource<Geometry>>;
   uuid: string;
 }
 
@@ -32,7 +37,7 @@ export class LayersService {
     this.layerData = new Map()
   }
 
-  addGeoJsonAndEventLayer(geoJsonObject: any, num: number, radius: number, workerCallBacks: any): Observable<void> {
+  addGeoJsonAndEventLayer(geoJsonObject: FeatureCollection, num: number, radius: number, workerCallBacks: any): Observable<void> {
     return this.addGeoJsonLayer(geoJsonObject).pipe(
       switchMap(layerId => {
         const polygon = geoJsonObject.features[0] as TurfFeature<(Polygon | MultiPolygon)>;
