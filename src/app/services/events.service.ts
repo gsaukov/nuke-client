@@ -44,7 +44,8 @@ export class EventsService {
       circleFeature.setStyle(style);
       circleFeatures.push(circleFeature)
     }
-    vectorSource.addFeatures(circleFeatures);
+    vectorSource.addFeatures(circleFeatures)
+    vectorSource.changed()
   }
 
   private radialGradientStylre(): Style {

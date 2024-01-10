@@ -77,8 +77,12 @@ export class LayersService {
     });
   }
 
-  addEventLayer(layerID:ILayerID, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number, workerCallBacks: any): Observable<void> {
-    const vectorSource = this.getLayerVector(layerID).getSource()!
+  addEventLayer(layerId:ILayerID, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number, workerCallBacks: any): Observable<void> {
+    // const vectorSource = this.getLayerVector(layerID).getSource()!
+    const vectorSource = new VectorSource();
+    const layer = new Vector({source: vectorSource,});
+    layer.set(LayersService.LAYER_ID, layerId)
+    this.map.addLayer(layer);
     return of(this.eventsService.addEventsToVector(vectorSource, polygon, num, radius, workerCallBacks))
   }
 
