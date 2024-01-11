@@ -79,6 +79,8 @@ export class CalculatorComponent  implements OnInit {
       radius: radius.toString(),
       number: number.toString()
     }
+    //angular router navigate invokes component lifecycle ngOnInit for example and etc...
+    //this may cause issues with map rendering after worker completion, because change event stops propagating.
     this.location.go(this.router.url.split("?")[0], new URLSearchParams(queryParams).toString());
   }
 
