@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {Location} from '@angular/common';
 import Map from 'ol/Map';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {NominatimService} from "../../../services/nominatim.service";
@@ -53,12 +54,13 @@ export class CalculatorComponent  implements OnInit {
               private nominatimService: NominatimService,
               private overpassService: OverpassService,
               private osm2GeojsonService: Osm2GeojsonService,
+              private location: Location,
               private router: Router,
               private route: ActivatedRoute) {
+    this.map = this.mapService.getMap()
   }
 
   ngOnInit(): void {
-    this.map = this.mapService.getMap()
     this.route.queryParams.subscribe((params: Params) => {
       this.defaultPlaceTypeSelect = !params['placeType']
       this.form = new FormGroup({
@@ -71,13 +73,13 @@ export class CalculatorComponent  implements OnInit {
   }
 
   addQueryParametersToUrl(placeType: string, placeName: string, radius: number, number: number) {
-    let queryParams: ICalculationQueryParameters = {
-      placeType: placeType,
-      placeName: placeName,
-      radius: radius,
-      number: number
+    let queryParams = {
+      placeType: placeType.toString(),
+      placeName: placeName.toString(),
+      radius: radius.toString(),
+      number: number.toString()
     }
-    this.router.navigate([], {queryParams: queryParams})
+    this.location.go(this.router.url.split("?")[0], new URLSearchParams(queryParams).toString());
   }
 
   onSubmit() {
