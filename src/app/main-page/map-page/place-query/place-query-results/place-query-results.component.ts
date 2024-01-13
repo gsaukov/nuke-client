@@ -6,6 +6,7 @@ import {MapService} from "../../../../services/map.service";
 import {ILayerID, LayersService} from "../../../../services/layers.service";
 import {Osm2GeojsonService} from "../../../../services/osm2seojson.service";
 import {FeatureCollection} from "@turf/helpers/dist/js/lib/geojson";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-place-query-results',
@@ -20,7 +21,7 @@ export class PlaceQueryResultsComponent {
 
   @Output() redirect:EventEmitter<FeatureCollection> = new EventEmitter();
 
-  constructor(private overpassService: OverpassService, private mapService: MapService, private layersService: LayersService, private osm2GeojsonService: Osm2GeojsonService) { }
+  constructor(private overpassService: OverpassService, private mapService: MapService, private layersService: LayersService, private osm2GeojsonService: Osm2GeojsonService, private router:Router) { }
 
   @Input()
   set dataSource(dataSource: NominatimResult[]) {
@@ -51,9 +52,12 @@ export class PlaceQueryResultsComponent {
     )
   }
 
-  selectPlace(element:NominatimResult) {
-    if(this.previewPlaceLayerId && this.previewPlaceLayerId.geoJsonId.indexOf(element.osm_id.toString()) > 0){
-
+  selectPlace(row:NominatimResult) {
+    if(this.previewPlaceLayerId && this.previewPlaceLayerId.geoJsonId.indexOf(row.osm_id.toString()) > 0){
+      this.redirect.emit(this.previewGeoJson);
+      this.router.navigate(["url"]);
+    } else {
+      this.previewPlace(row)
     }
   }
 
