@@ -9,19 +9,13 @@ import {Observable, of, switchMap} from "rxjs";
 import {GeoJSON} from "ol/format";
 import {Fill, Stroke, Style} from "ol/style";
 import {Feature as TurfFeature, FeatureCollection} from "@turf/helpers/dist/js/lib/geojson";
-import {MultiPolygon, Polygon, Properties} from "@turf/turf";
+import {MultiPolygon, Polygon} from "@turf/turf";
 import {EventsService} from "./events.service";
 
 export interface ILayerID {
   geoJsonId: string;
   uuid: string;
 }
-
-export interface ILayerData {
-  vector: Vector<VectorSource<Geometry>>;
-  uuid: string;
-}
-
 
 @Injectable({
   providedIn: 'root'
@@ -78,7 +72,6 @@ export class LayersService {
   }
 
   addEventLayer(layerId:ILayerID, polygon: TurfFeature<(Polygon | MultiPolygon)>, num: number, radius: number, workerCallBacks: any): Observable<void> {
-    // const vectorSource = this.getLayerVector(layerID).getSource()!
     const vectorSource = new VectorSource();
     const layer = new Vector({source: vectorSource,});
     layer.set(LayersService.LAYER_ID, layerId)
