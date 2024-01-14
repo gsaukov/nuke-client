@@ -45,11 +45,11 @@ export class MapService {
     });
   }
 
-  setViewOnGeoJson(geoJsonObject: FeatureCollection): Observable<void> {
+  setViewOnGeoJson(geoJsonObject: FeatureCollection): Observable<FeatureCollection> {
     return new Observable((observer) => {
       const bbox = this.turfService.bbox(geoJsonObject)
       this.map.getView().fit(transformExtent(bbox, 'EPSG:4326', this.map.getView().getProjection()), {size: this.map.getSize()});
-      observer.next();
+      observer.next(geoJsonObject);
       observer.complete();
     });
   }
