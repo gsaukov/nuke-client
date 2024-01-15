@@ -15,7 +15,9 @@ export class MapPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   this.mapService.buildMap().subscribe(map =>  this._map = map);
+    if (!this._map) {
+      this.mapService.buildMap().subscribe(map => this._map = map);
+    }
   }
 
   get map(): Map {
