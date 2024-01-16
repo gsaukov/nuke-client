@@ -66,8 +66,8 @@ export class CalculatorComponent  implements OnInit {
       this.form = new FormGroup({
         placeType: new FormControl(params['placeType'], [Validators.required]),
         placeName: new FormControl(params['placeName'], [Validators.required]),
-        radius: new FormControl(params['radius'], [Validators.required]),
-        number: new FormControl(params['number'], [Validators.required]),
+        radius: new FormControl(Number(params['radius']), [Validators.required]),
+        number: new FormControl(Number(params['number']), [Validators.required]),
       })
     })
   }
@@ -88,10 +88,10 @@ export class CalculatorComponent  implements OnInit {
     this.errorMessage = null
     this.form.disable()
     this.loading = true
-    const placeType = this.form.controls['placeType'].value
-    const placeName = this.form.controls['placeName'].value
-    const radius = this.form.controls['radius'].value
-    const num = this.form.controls['number'].value
+    const placeType:string = this.form.controls['placeType'].value
+    const placeName:string  = this.form.controls['placeName'].value
+    const radius:number = this.form.controls['radius'].value
+    const num:number = this.form.controls['number'].value
     this.calculationResults = this.newCalculationResults(placeName, radius, num)
     this.addQueryParametersToUrl(placeType, placeName, radius, num);
     of(placeName).pipe(
