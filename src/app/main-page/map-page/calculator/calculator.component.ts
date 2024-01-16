@@ -59,7 +59,6 @@ export class CalculatorComponent  implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("NGInit CalculatorComponent")
     this.route.queryParams.subscribe((params: Params) => {
       this.defaultPlaceTypeSelect = !params['placeType']
       this.form = new FormGroup({
