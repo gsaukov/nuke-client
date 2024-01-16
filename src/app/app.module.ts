@@ -18,6 +18,8 @@ import {
     PlaceEventsComponent
 } from "./main-page/map-page/place-query/place-events/place-events.component";
 
+
+
 @NgModule({
   declarations: [
     AppComponent,

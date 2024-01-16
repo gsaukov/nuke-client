@@ -23,6 +23,11 @@ export interface ILayerData {
 }
 
 
+function logEvent(event:any) {
+  console.log('Event type:', event.type);
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -81,6 +86,24 @@ export class LayersService {
     // const vectorSource = this.getLayerVector(layerID).getSource()!
     const vectorSource = new VectorSource();
     const layer = new Vector({source: vectorSource,});
+    vectorSource.addEventListener('addfeature' , logEvent)
+    vectorSource.addEventListener('changefeature' , logEvent)
+    vectorSource.addEventListener('clear' , logEvent)
+    vectorSource.addEventListener('removefeature' , logEvent)
+    vectorSource.addEventListener('featuresloadstart' , logEvent)
+    vectorSource.addEventListener('featuresloadend' , logEvent)
+    vectorSource.addEventListener('featuresloaderror', logEvent)
+    vectorSource.addEventListener('propertychange', logEvent)
+
+    layer.addEventListener('addfeature' , logEvent)
+    layer.addEventListener('changefeature' , logEvent)
+    layer.addEventListener('clear' , logEvent)
+    layer.addEventListener('removefeature' , logEvent)
+    layer.addEventListener('featuresloadstart' , logEvent)
+    layer.addEventListener('featuresloadend' , logEvent)
+    layer.addEventListener('featuresloaderror', logEvent)
+    layer.addEventListener('propertychange', logEvent)
+
     layer.set(LayersService.LAYER_ID, layerId)
     this.map.addLayer(layer);
     return of(this.eventsService.addEventsToVector(vectorSource, polygon, num, radius, workerCallBacks))

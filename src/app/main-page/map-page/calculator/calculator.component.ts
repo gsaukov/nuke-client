@@ -58,18 +58,18 @@ export class CalculatorComponent  implements OnInit {
               private router: Router,
               private route: ActivatedRoute) {
     this.map = this.mapService.getMap()
-  }
-
-  ngOnInit(): void {
     this.route.queryParams.subscribe((params: Params) => {
       this.defaultPlaceTypeSelect = !params['placeType']
       this.form = new FormGroup({
         placeType: new FormControl(params['placeType'], [Validators.required]),
         placeName: new FormControl(params['placeName'], [Validators.required]),
-        radius: new FormControl(params['radius'], [Validators.required]),
-        number: new FormControl(params['number'], [Validators.required]),
+        radius: new FormControl(Number(params['radius']), [Validators.required]),
+        number: new FormControl(Number(params['number']), [Validators.required]),
       })
     })
+  }
+
+  ngOnInit(): void {
   }
 
   addQueryParametersToUrl(placeType: string, placeName: string, radius: number, number: number) {

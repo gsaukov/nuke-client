@@ -8,6 +8,42 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
+<script>
+  function logEvent(event) {
+    console.log('Event type:', event.type);
+  }
+
+  function startMonitoring() {
+    // Add an event listener for each possible event type
+    const allEventTypes = [
+      'click', 'change', 'input', 'submit', 'reset', 'resize',
+      'MapBrowserEvent',
+      'MapEvent',
+      'MapEvent',
+      'ObjectEvent',
+      'SnapEvent',
+      'DragAndDropEvent',
+      'DragBoxEvent',
+      'DrawEvent',
+      'ExtentEvent',
+      'ModifyEvent',
+      'SelectEvent',
+      'TranslateEvent',
+      'GroupEvent',
+      'RenderEvent',
+      'ImageSourceEvent',
+      'RasterSourceEvent',
+      'TileSourceEvent',
+      'VectorSourceEvent',
+    ];
+
+    // for (const eventType of allEventTypes) {
+    //   window.addEventListener(eventType, logEvent);
+    // }
+  }
+
+  startMonitoring();
+</script>
   <app-root></app-root>
 </body>
 </html>
