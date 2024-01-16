@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Location} from '@angular/common';
 import Map from 'ol/Map';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {NominatimService} from "../../../services/nominatim.service";
@@ -54,13 +53,13 @@ export class CalculatorComponent  implements OnInit {
               private nominatimService: NominatimService,
               private overpassService: OverpassService,
               private osm2GeojsonService: Osm2GeojsonService,
-              private location: Location,
               private router: Router,
               private route: ActivatedRoute) {
     this.map = this.mapService.getMap()
   }
 
   ngOnInit(): void {
+    console.log("NGInit CalculatorComponent")
     this.route.queryParams.subscribe((params: Params) => {
       this.defaultPlaceTypeSelect = !params['placeType']
       this.form = new FormGroup({
@@ -79,9 +78,7 @@ export class CalculatorComponent  implements OnInit {
       radius: radius.toString(),
       number: number.toString()
     }
-    //angular router navigate invokes component lifecycle ngOnInit for example and etc...
-    //this may cause issues with map rendering after worker completion, because change event stops propagating.
-    this.location.go(this.router.url.split("?")[0], new URLSearchParams(queryParams).toString());
+    this.router.navigate([], {queryParams: queryParams})
   }
 
   onSubmit() {
