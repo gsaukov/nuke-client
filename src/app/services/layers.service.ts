@@ -80,11 +80,14 @@ export class LayersService {
   }
 
   removeLayer(layerId:ILayerID){
-    this.map.getLayers().forEach(layer => {
-      if (layer && layer.get(LayersService.LAYER_ID) === layerId) {
-        this.map.removeLayer(layer);
-      }
-    });
+    if(layerId) {
+      this.map.getLayers().forEach(layer => {
+        if (layer && layer.get(LayersService.LAYER_ID) === layerId) {
+          console.log(layer)
+          this.map.removeLayer(layer);
+        }
+      });
+    }
   }
 
   getLayerVector(layerId:ILayerID):Vector<VectorSource<Geometry>> {
