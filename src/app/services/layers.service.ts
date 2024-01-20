@@ -83,7 +83,6 @@ export class LayersService {
     if(layerId) {
       this.map.getLayers().forEach(layer => {
         if (layer && layer.get(LayersService.LAYER_ID) === layerId) {
-          console.log(layer)
           this.map.removeLayer(layer);
         }
       });

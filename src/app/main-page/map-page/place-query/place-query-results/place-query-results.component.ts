@@ -30,14 +30,15 @@ export class PlaceQueryResultsComponent {
   }
 
   previewPlace(row:NominatimResult) {
-    if(this.previewPlaceLayerId){
+    if(!this.isSameLayer(row)){
       this.removePreviewLayer()
+      this.flowService.previewPlace(row).subscribe(
+        responses => {
+          this.previewPlaceLayerId = responses[0]
+          this.previewGeoJson = responses[1]
+        }
+      )
     }
-    this.flowService.previewPlace(row).subscribe(
-      responses => {
-        this.previewPlaceLayerId = responses[0]
-      }
-    )
   }
 
   selectPlace(row:NominatimResult) {
@@ -47,6 +48,10 @@ export class PlaceQueryResultsComponent {
     } else {
       this.previewPlace(row)
     }
+  }
+
+  private isSameLayer(row:NominatimResult):boolean {
+    return Boolean(this.previewPlaceLayerId && this.previewPlaceLayerId.geoJsonId.indexOf(row.osm_id.toString()) > 0)
   }
 
   private removePreviewLayer() {
