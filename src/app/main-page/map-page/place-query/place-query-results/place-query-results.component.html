@@ -1,4 +1,5 @@
 <div *ngIf="dataSource.length > 0; else noPlaceFound">
+  <div class="table-container">
   <table mat-table
          [dataSource]="dataSource" multiTemplateDataRows
          class="mat-elevation-z8" style="position: relative">
@@ -32,10 +33,11 @@
       </td>
     </ng-container>
   </table>
+  </div>
 </div>
 <ng-template #noPlaceFound>
   <div class="no-place-found">
-    <span>No place found</span>
+    <span>Place not found!</span>
   </div>
 </ng-template>
 
